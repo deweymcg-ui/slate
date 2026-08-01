@@ -50,6 +50,14 @@ function createWindow(): void {
   })
 }
 
+app.setAboutPanelOptions({
+  applicationName: 'Slate',
+  applicationVersion: '0.1.0',
+  copyright: 'Apache-2.0 · Sam Wasserman',
+  credits: 'The prompt studio for AI filmmaking.\nPlan · Direct · Compile',
+  iconPath: join(__dirname, '../../build/icon.png')
+})
+
 app.whenReady().then(async () => {
   createWindow()
   await startControlServer(notifyProjectsChanged)
@@ -75,6 +83,18 @@ ipcMain.handle('projects:reveal', (_e, id: string) => {
 })
 
 ipcMain.handle('brain:status', () => brainStatus())
+ipcMain.handle('brain:test', async (_e, backend: 'claude' | 'codex') => {
+  return brainRun(
+    {
+      id: `test-${Date.now()}`,
+      task: 'self-test',
+      system: 'You are a connectivity check. Reply with exactly one word.',
+      prompt: 'Reply with exactly: READY',
+      tier: 'fast'
+    },
+    backend
+  )
+})
 ipcMain.handle('brain:run', (_e, req: BrainRequest & { backend: 'claude' | 'codex' }) =>
   brainRun(req, req.backend)
 )

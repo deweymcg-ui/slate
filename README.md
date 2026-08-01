@@ -1,11 +1,9 @@
 <p align="center">
-  <img src="build/icon.png" width="128" alt="Slate icon" />
+  <img src="resources/brand.webp" width="520" alt="Slate — prompt studio for AI filmmaking. Plan · Direct · Compile" />
 </p>
 
-<h1 align="center">Slate</h1>
-
 <p align="center"><b>The prompt studio for AI filmmaking.</b><br />
-Plan shots, direct coverage, keep continuity — and compile production-ready prompts for any image or video generator.</p>
+Plan shots, direct coverage, spot your score, cast your voices, keep continuity — and compile production-ready prompts for any image, video, music, or voice generator.</p>
 
 ---
 

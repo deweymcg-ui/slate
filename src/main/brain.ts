@@ -2,7 +2,34 @@
 // No API keys are stored or used; billing rides on the user's existing subscriptions.
 
 import { execFile, spawn, ChildProcess } from 'child_process'
+import { existsSync } from 'fs'
+import { join } from 'path'
+import { homedir } from 'os'
 import type { BrainRequest, BrainResult, BrainStatus, BrainTier } from '../shared/types'
+
+// Electron apps launched from Finder/Dock inherit a minimal PATH that misses
+// Homebrew and user bins — resolve the CLIs explicitly and augment PATH.
+const CLI_DIRS = [
+  '/opt/homebrew/bin',
+  '/usr/local/bin',
+  join(homedir(), '.local', 'bin'),
+  join(homedir(), 'bin'),
+  join(homedir(), '.npm-global', 'bin'),
+  '/usr/bin'
+]
+
+function resolveCli(name: string): string {
+  for (const dir of CLI_DIRS) {
+    const p = join(dir, name)
+    if (existsSync(p)) return p
+  }
+  return name // hope PATH has it
+}
+
+function brainEnv(): NodeJS.ProcessEnv {
+  const extra = CLI_DIRS.join(':')
+  return { ...process.env, PATH: `${process.env.PATH ?? ''}:${extra}` }
+}
 
 const CLAUDE_TIER_MODEL: Record<BrainTier, string | null> = {
   fast: 'haiku',
@@ -14,7 +41,7 @@ const running = new Map<string, ChildProcess>()
 
 function which(cmd: string, args: string[]): Promise<string | null> {
   return new Promise((resolve) => {
-    execFile(cmd, args, { timeout: 15000 }, (err, stdout) => {
+    execFile(resolveCli(cmd), args, { timeout: 15000, env: brainEnv() }, (err, stdout) => {
       if (err) resolve(null)
       else resolve(stdout.trim().split('\n')[0] || 'available')
     })
@@ -112,14 +139,16 @@ function parseClaudeOutput(raw: string): string {
     const parsed = JSON.parse(raw)
     if (parsed?.is_error) {
       const msg: string = typeof parsed.result === 'string' ? parsed.result : 'Claude Code returned an error.'
-      if (/authenticat|oauth|401|logged? ?in/i.test(msg)) {
-        throw new Error(`Claude Code isn't signed in — run \`claude login\` in a terminal, then retry. (${msg})`)
+      if (/authenticat|oauth|401|logged? ?in|revoked/i.test(msg)) {
+        throw new Error(
+          `Claude Code's sign-in has expired or been revoked. Open Terminal, run: claude auth login  — approve in the browser, then retry. (${msg})`
+        )
       }
       throw new Error(msg)
     }
     if (typeof parsed?.result === 'string') return parsed.result
   } catch (e) {
-    if (e instanceof Error && e.message.includes('claude login')) throw e
+    if (e instanceof Error && e.message.includes('claude auth login')) throw e
     if (e instanceof Error && !(e instanceof SyntaxError)) throw e
     /* fall through — some versions emit plain text on error */
   }
@@ -135,8 +164,8 @@ export async function brainRun(
 
   const runOnce = (extraNudge?: string): Promise<string> =>
     new Promise((resolve, reject) => {
-      const child = spawn(call.cmd, call.args, {
-        env: { ...process.env },
+      const child = spawn(resolveCli(call.cmd), call.args, {
+        env: brainEnv(),
         stdio: ['pipe', 'pipe', 'pipe']
       })
       running.set(req.id, child)

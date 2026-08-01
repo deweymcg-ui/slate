@@ -300,6 +300,7 @@ export interface SlateApi {
   brainStatus(): Promise<BrainStatus>
   brainRun(req: BrainRequest): Promise<BrainResult>
   brainCancel(id: string): Promise<void>
+  brainTest(backend: 'claude' | 'codex'): Promise<BrainResult>
   pickMedia(): Promise<string[]>
   pickAudio(): Promise<string[]>
   ingestMedia(projectId: string, path: string): Promise<{ kind: 'image' | 'video'; frames: string[] }>

@@ -13,6 +13,7 @@ const api: SlateApi & { brainRunWith: (req: BrainRequest, backend: 'claude' | 'c
   brainRunWith: (req: BrainRequest, backend: 'claude' | 'codex') =>
     ipcRenderer.invoke('brain:run', { ...req, backend }),
   brainCancel: (id: string) => ipcRenderer.invoke('brain:cancel', id),
+  brainTest: (backend: 'claude' | 'codex') => ipcRenderer.invoke('brain:test', backend),
   pickMedia: () => ipcRenderer.invoke('media:pick'),
   pickAudio: () => ipcRenderer.invoke('media:pickAudio'),
   ingestMedia: (projectId: string, path: string) => ipcRenderer.invoke('media:ingest', projectId, path),

@@ -48,6 +48,15 @@ export function installDevMock(): void {
       }
     },
     async brainCancel() {},
+    async brainTest(): Promise<import('../../../shared/types').BrainResult> {
+      return {
+        id: 'test',
+        ok: false,
+        text: '',
+        error: 'Browser preview — the brain runs only in the desktop app.',
+        elapsedMs: 0
+      }
+    },
     async pickMedia() {
       return []
     },

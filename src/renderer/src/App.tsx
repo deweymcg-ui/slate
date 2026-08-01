@@ -11,6 +11,26 @@ export default function App(): React.JSX.Element {
   const { project, refreshMetas, refreshBrain, brain, dirty, close } = useProject()
   const [railOpen, setRailOpen] = useState(true)
   const [adOpen, setAdOpen] = useState(false)
+  const [testState, setTestState] = useState<'idle' | 'busy' | 'ok' | 'fail'>('idle')
+  const [testMsg, setTestMsg] = useState<string | null>(null)
+
+  const runBrainTest = async (): Promise<void> => {
+    if (!project || testState === 'busy') return
+    setTestState('busy')
+    setTestMsg(null)
+    const res = await window.slate.brainTest(project.defaults.brain)
+    if (res.ok && /ready/i.test(res.text)) {
+      setTestState('ok')
+      setTestMsg(`Brain online — replied in ${(res.elapsedMs / 1000).toFixed(1)}s`)
+      setTimeout(() => {
+        setTestState('idle')
+        setTestMsg(null)
+      }, 6000)
+    } else {
+      setTestState('fail')
+      setTestMsg(res.error ?? `Unexpected reply: ${res.text.slice(0, 80)}`)
+    }
+  }
 
   useEffect(() => {
     void refreshMetas()
@@ -33,11 +53,20 @@ export default function App(): React.JSX.Element {
           {dirty && <span className="save-dot" title="Saving…" />}
           {project && (
             <>
-              <span className="brain-pill" data-ok={brainReady ? '1' : '0'}>
-                {brainReady
-                  ? `Brain: ${project.defaults.brain === 'claude' ? 'Claude Code' : 'Codex'}`
-                  : 'Brain offline'}
-              </span>
+              <button
+                className="brain-pill"
+                data-ok={testState === 'fail' ? '0' : brainReady ? '1' : '0'}
+                onClick={() => void runBrainTest()}
+                title="Click to test the brain with a tiny live call"
+              >
+                {testState === 'busy'
+                  ? 'Testing…'
+                  : testState === 'ok'
+                    ? '✓ Brain online'
+                    : brainReady
+                      ? `Brain: ${project.defaults.brain === 'claude' ? 'Claude Code' : 'Codex'} — test`
+                      : 'Brain offline'}
+              </button>
               <button
                 className={`btn btn-sm ad-toggle ${adOpen ? 'on' : ''}`}
                 onClick={() => setAdOpen((v) => !v)}
@@ -53,6 +82,11 @@ export default function App(): React.JSX.Element {
         </div>
       </div>
 
+      {testMsg && testState === 'fail' && (
+        <div className="brain-toast" onClick={() => setTestMsg(null)}>
+          ⚠ {testMsg}
+        </div>
+      )}
       {!project ? (
         <Home />
       ) : (

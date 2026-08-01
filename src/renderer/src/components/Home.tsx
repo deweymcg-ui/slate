@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import { useProject } from '../stores/project'
+import brandArt from '../assets/brand.webp'
+
+const APP_VERSION = '0.1.0'
 
 export default function Home(): React.JSX.Element {
   const { metas, create, open, remove, brain } = useProject()
   const [name, setName] = useState('')
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
+  const [showAbout, setShowAbout] = useState(false)
 
   const submit = (): void => {
     const n = name.trim()
@@ -18,10 +22,9 @@ export default function Home(): React.JSX.Element {
     <div className="home">
       <div className="home-inner">
         <div className="home-hero">
-          <div className="home-mark">◆</div>
-          <h1>Slate</h1>
+          <img className="home-brand" src={brandArt} alt="Slate — prompt studio for AI filmmaking" />
           <p>
-            The prompt studio for AI filmmaking. Plan shots, direct coverage, keep continuity — and
+            Plan shots, direct coverage, spot your score, cast your voices, keep continuity — and
             compile production-ready prompts for any generator.
           </p>
           {brain && !brain.claude.available && !brain.codex.available && (
@@ -95,7 +98,37 @@ export default function Home(): React.JSX.Element {
             ))}
           </div>
         )}
+
+        <div className="home-foot">
+          <button className="btn btn-ghost btn-sm" onClick={() => setShowAbout(true)}>
+            About Slate
+          </button>
+        </div>
       </div>
+
+      {showAbout && (
+        <div className="modal-scrim" onClick={() => setShowAbout(false)}>
+          <div className="modal about-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-body" style={{ textAlign: 'center', padding: '22px 26px' }}>
+              <img className="about-brand" src={brandArt} alt="Slate" />
+              <p className="about-text">
+                Slate is the prompt studio for AI filmmaking — plan shots, direct coverage, spot
+                your score, cast your voices, and keep continuity across an entire film while an AI
+                brain helps you craft every prompt. Compile each one for your generator of choice;
+                Slate makes the prompts, your generators make the picture and sound.
+              </p>
+              <p className="about-meta">
+                Version {APP_VERSION} · Apache-2.0 · Sam Wasserman
+                <br />
+                Brain: your local Claude Code or Codex sign-in — no API keys.
+              </p>
+              <button className="btn" onClick={() => setShowAbout(false)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
