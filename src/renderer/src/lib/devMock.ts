@@ -78,6 +78,9 @@ export function installDevMock(): void {
     async revealProject() {},
     onProjectsChanged() {
       return () => {}
+    },
+    onHelpOpen() {
+      return () => {}
     }
   }
   ;(window as unknown as { slate: SlateApi }).slate = api

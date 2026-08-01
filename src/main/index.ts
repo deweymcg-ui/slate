@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, shell, clipboard } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, shell, clipboard, Menu } from 'electron'
 import { join } from 'path'
 import { brainRun, brainCancel, brainStatus } from './brain'
 import {
@@ -50,6 +50,8 @@ function createWindow(): void {
   })
 }
 
+app.setName('Slate')
+
 app.setAboutPanelOptions({
   applicationName: 'Slate',
   applicationVersion: '0.1.0',
@@ -58,7 +60,40 @@ app.setAboutPanelOptions({
   iconPath: join(__dirname, '../../build/icon.png')
 })
 
+function buildMenu(): void {
+  const openHelp = (): void => {
+    win?.webContents.send('help:open')
+    win?.show()
+  }
+  const template: Electron.MenuItemConstructorOptions[] = [
+    {
+      label: 'Slate',
+      submenu: [
+        { role: 'about', label: 'About Slate' },
+        { type: 'separator' },
+        { label: 'Slate Help', accelerator: 'CmdOrCtrl+/', click: openHelp },
+        { type: 'separator' },
+        { role: 'hide', label: 'Hide Slate' },
+        { role: 'hideOthers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit', label: 'Quit Slate' }
+      ]
+    },
+    { role: 'fileMenu' },
+    { role: 'editMenu' },
+    { role: 'viewMenu' },
+    { role: 'windowMenu' },
+    {
+      role: 'help',
+      submenu: [{ label: 'Slate Help', accelerator: 'CmdOrCtrl+?', click: openHelp }]
+    }
+  ]
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+}
+
 app.whenReady().then(async () => {
+  buildMenu()
   createWindow()
   await startControlServer(notifyProjectsChanged)
 

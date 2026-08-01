@@ -309,4 +309,5 @@ export interface SlateApi {
   copyText(text: string): Promise<void>
   revealProject(id: string): Promise<void>
   onProjectsChanged(cb: () => void): () => void
+  onHelpOpen(cb: () => void): () => void
 }

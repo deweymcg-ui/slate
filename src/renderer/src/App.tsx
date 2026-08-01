@@ -4,6 +4,7 @@ import Navigator from './components/Navigator'
 import ShotWorkspace from './components/ShotWorkspace'
 import RightRail from './components/RightRail'
 import FirstADPanel from './components/FirstADPanel'
+import HelpModal from './components/HelpModal'
 import Home from './components/Home'
 import './styles/app.css'
 
@@ -11,6 +12,7 @@ export default function App(): React.JSX.Element {
   const { project, refreshMetas, refreshBrain, brain, dirty, close } = useProject()
   const [railOpen, setRailOpen] = useState(true)
   const [adOpen, setAdOpen] = useState(false)
+  const [helpOpen, setHelpOpen] = useState(false)
   const [testState, setTestState] = useState<'idle' | 'busy' | 'ok' | 'fail'>('idle')
   const [testMsg, setTestMsg] = useState<string | null>(null)
 
@@ -38,7 +40,11 @@ export default function App(): React.JSX.Element {
     const off = window.slate.onProjectsChanged(() => {
       void refreshMetas()
     })
-    return off
+    const offHelp = window.slate.onHelpOpen(() => setHelpOpen(true))
+    return () => {
+      off()
+      offHelp()
+    }
   }, [refreshMetas, refreshBrain])
 
   const brainReady = brain?.claude.available || brain?.codex.available
@@ -51,6 +57,9 @@ export default function App(): React.JSX.Element {
         </div>
         <div className="titlebar-side">
           {dirty && <span className="save-dot" title="Saving…" />}
+          <button className="btn btn-ghost btn-sm" title="Slate Help (⌘/)" onClick={() => setHelpOpen(true)}>
+            ?
+          </button>
           {project && (
             <>
               <button
@@ -82,6 +91,7 @@ export default function App(): React.JSX.Element {
         </div>
       </div>
 
+      {helpOpen && <HelpModal onClose={() => setHelpOpen(false)} />}
       {testMsg && testState === 'fail' && (
         <div className="brain-toast" onClick={() => setTestMsg(null)}>
           ⚠ {testMsg}
