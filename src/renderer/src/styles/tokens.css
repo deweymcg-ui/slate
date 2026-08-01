@@ -1,0 +1,53 @@
+/* Slate design tokens — dark cinematic. Tungsten key against cool slate shadows. */
+
+:root {
+  /* Surfaces — cool near-black with blue undertone, like an unlit stage */
+  --bg-0: #0c0d10;
+  --bg-1: #101216;
+  --bg-2: #15181d;
+  --bg-3: #1b1f26;
+  --bg-raised: #20242c;
+  --border: #262b34;
+  --border-strong: #333a46;
+
+  /* Ink */
+  --ink-0: #f2f4f7;
+  --ink-1: #c8cdd6;
+  --ink-2: #8b93a1;
+  --ink-3: #5c6472;
+
+  /* Tungsten accent — a practical lamp in the dark */
+  --key: #e3b341;
+  --key-bright: #f2c855;
+  --key-dim: #a8842e;
+  --key-ghost: rgba(227, 179, 65, 0.12);
+
+  /* Signal colors */
+  --cool: #56b8c9;
+  --ok: #6dbf7e;
+  --warn: #d98e4a;
+  --danger: #d96a6a;
+
+  /* Syntax categories */
+  --syn-section: #8b93a1;
+  --syn-camera: #56b8c9;
+  --syn-lighting: #e3b341;
+  --syn-color: #c886c8;
+  --syn-motion: #6dbf7e;
+  --syn-mood: #9d8cff;
+  --syn-technical: #7aa2e8;
+
+  /* Type */
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Rhythm */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 8px 28px rgba(0, 0, 0, 0.5);
+  --shadow-key: 0 0 0 1px var(--key-ghost), 0 4px 18px rgba(227, 179, 65, 0.08);
+
+  --ease: cubic-bezier(0.25, 0.7, 0.3, 1);
+}
