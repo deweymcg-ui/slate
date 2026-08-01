@@ -2,9 +2,9 @@
 // No API keys are stored or used; billing rides on the user's existing subscriptions.
 
 import { execFile, spawn, ChildProcess } from 'child_process'
-import { existsSync } from 'fs'
+import { existsSync, readFileSync, rmSync } from 'fs'
 import { join } from 'path'
-import { homedir } from 'os'
+import { homedir, tmpdir } from 'os'
 import type { BrainRequest, BrainResult, BrainStatus, BrainTier } from '../shared/types'
 
 // Electron apps launched from Finder/Dock inherit a minimal PATH that misses
@@ -18,7 +18,12 @@ const CLI_DIRS = [
   '/usr/bin'
 ]
 
+// The ChatGPT desktop app bundles a signed, version-matched codex that shares
+// the user's ChatGPT sign-in — prefer it over any npm-installed copy.
+const CODEX_BUNDLED = '/Applications/ChatGPT.app/Contents/Resources/codex'
+
 function resolveCli(name: string): string {
+  if (name === 'codex' && existsSync(CODEX_BUNDLED)) return CODEX_BUNDLED
   for (const dir of CLI_DIRS) {
     const p = join(dir, name)
     if (existsSync(p)) return p
@@ -124,13 +129,15 @@ function buildClaudeCall(req: BrainRequest): CliCall {
   return { cmd: 'claude', args, input: prompt }
 }
 
-function buildCodexCall(req: BrainRequest): CliCall {
-  // codex exec runs a one-shot non-interactive task and prints the final message.
-  const args = ['exec', '--skip-git-repo-check', '-']
-  let prompt = `${req.system}\n\n---\n\n${req.prompt}`
+function buildCodexCall(req: BrainRequest, lastMessageFile: string): CliCall {
+  // codex exec runs a one-shot task; the clean final answer lands in
+  // --output-last-message (stdout interleaves streaming/progress noise).
+  const args = ['exec', '--skip-git-repo-check', '--output-last-message', lastMessageFile]
   if (req.images && req.images.length > 0) {
     for (const img of req.images) args.push('-i', img)
   }
+  args.push('-')
+  const prompt = `${req.system}\n\n---\n\n${req.prompt}`
   return { cmd: 'codex', args, input: prompt }
 }
 
@@ -160,7 +167,19 @@ export async function brainRun(
   backend: 'claude' | 'codex'
 ): Promise<BrainResult> {
   const started = Date.now()
-  const call = backend === 'claude' ? buildClaudeCall(req) : buildCodexCall(req)
+  const lastMessageFile = join(tmpdir(), `slate-codex-${req.id}.txt`)
+  const call = backend === 'claude' ? buildClaudeCall(req) : buildCodexCall(req, lastMessageFile)
+
+  const codexResult = (rawStdout: string): string => {
+    try {
+      const msg = readFileSync(lastMessageFile, 'utf8').trim()
+      rmSync(lastMessageFile, { force: true })
+      if (msg) return msg
+    } catch {
+      /* fall back to stdout */
+    }
+    return rawStdout.trim()
+  }
 
   const runOnce = (extraNudge?: string): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -183,7 +202,7 @@ export async function brainRun(
           reject(new Error(errOut.trim() || `${call.cmd} exited with code ${code}`))
         } else {
           try {
-            resolve(backend === 'claude' ? parseClaudeOutput(out) : out.trim())
+            resolve(backend === 'claude' ? parseClaudeOutput(out) : codexResult(out))
           } catch (e) {
             reject(e instanceof Error ? e : new Error(String(e)))
           }
