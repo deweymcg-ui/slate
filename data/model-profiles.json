@@ -119,37 +119,36 @@
       "id": "flux-3",
       "label": "FLUX 3",
       "vendor": "Black Forest Labs",
-      "kind": "image",
+      "kind": "video",
       "dialect": {
         "style": "cinematic-prose",
-        "guidance": "Write declarative English sentences — the text encoder is an instruction-tuned language model, so a comma-separated tag list reads to it as broken prose and degrades the result. Token position carries weight, so lead with the single most important element of the frame and let secondary detail follow; the first clause effectively sets the subject. Aim for a focused paragraph in the range of roughly thirty to eighty words for most shots: enough for subject, action, environment, light and lens, without padding that dilutes the early tokens. Typography is a genuine strength — put literal signage in quotes and describe its placement and material, and it will usually hold. Do not rely on a negative prompt; state what you want present instead, and use reference images for consistency rather than re-describing a character across prompts."
+        "guidance": "Write a short shot brief rather than a caption: name one concrete subject, the motion it performs across the clip, the setting and light, a shot type carrying at most one camera move, and then the sound. Always include one audio cue — an effect, a room tone, a music mood or a spoken line — because picture and audio are generated in the same pass, and an unwritten soundtrack is one the model chooses for you; state the spoken language when the scene has dialogue. Keep each generation to a single clear action and chain clips for longer sequences instead of packing a scene change into one take. Two or three sentences usually suffices; exhaustive wardrobe, lens and lighting inventories are not required the way they are for a stills model, and comma-separated tag lists read as broken prose to the text encoder. There is no documented negative-prompt field, so phrase exclusions as positive statements about what should be present. Camera direction lives in the prose — there is no separate move parameter to fall back on."
       },
       "limits": {
         "maxChars": null,
-        "maxDurationSec": null,
-        "durations": null,
-        "aspectRatios": ["1:1", "4:3", "3:2", "16:9", "21:9", "3:4", "2:3", "9:16"],
+        "maxDurationSec": 20,
+        "durations": [5, 10, 15, 20],
+        "aspectRatios": null,
         "fps": null,
-        "resolutions": ["up to 4 megapixels at any aspect ratio"]
+        "resolutions": ["480p", "720p"]
       },
       "features": {
         "negativePrompt": false,
         "timecodeBeats": false,
         "imageInput": true,
         "cameraControls": false,
-        "seeds": true
+        "seeds": false
       },
       "params": [
-        { "name": "aspect_ratio", "type": "string", "note": "Arbitrary ratios accepted within the 4MP pixel budget; the listed values are common presets." },
-        { "name": "guidance_scale", "type": "number", "values": ["default 3.5"], "note": "Exposed on the [flex] variant only; [pro] and [max] hide it deliberately." },
-        { "name": "num_inference_steps", "type": "number", "values": ["default 28"], "note": "Exposed on the [flex] variant only." },
-        { "name": "seed", "type": "number", "note": "Supported." },
-        { "name": "safety_tolerance", "type": "number", "values": ["1-5"], "note": "1 is strictest, default 2." },
-        { "name": "output_format", "type": "enum", "values": ["jpeg", "png"], "note": "JPEG is the default." },
-        { "name": "reference_images", "type": "list", "note": "Up to 10 simultaneous references for character and layout consistency." },
-        { "name": "variant", "type": "enum", "values": ["pro", "flex", "dev", "max", "klein"], "note": "flex is the only variant exposing steps and guidance; klein targets fast on-device iteration." }
+        { "name": "mode", "type": "enum", "values": ["text-to-video", "image-to-video", "video-to-video", "keyframe-to-video", "audio-continuation"], "note": "Generation modes named in BFL's launch post; the actual API field name is not published." },
+        { "name": "duration", "type": "enum", "values": [5, 10, 15, 20, "auto"], "note": "Steps reported by hosting providers, plus an auto setting that lets the model pick. 20s is the single-generation ceiling; go longer by chaining clips." },
+        { "name": "resolution", "type": "enum", "values": ["480p", "720p"], "note": "720p is the early-access ceiling. 1080p is reported as expected to follow but is not live." },
+        { "name": "reference_images", "type": "list", "note": "Up to 10 image references. Early-access reports say reference adherence is still inconsistent for image-to-video." },
+        { "name": "audio", "type": "boolean", "values": ["always on"], "note": "Native synchronized audio is produced with every clip; no silent mode is documented. Multilingual dialogue is supported — declare the language in the prompt." },
+        { "name": "seed", "type": "number", "note": "Not documented for FLUX 3 Video early access. Do not assume reproducibility." },
+        { "name": "variant", "type": "enum", "values": ["FLUX 3 Video", "FLUX 3 Image", "FLUX 3 Action / FLUX-mimic", "FLUX 3 Dev"], "note": "Only FLUX 3 Video is reachable, via gated early access. FLUX 3 Image early access had not opened as of July 31, 2026; FLUX 3 Dev open weights are planned for later in 2026." }
       ],
-      "notes": "VERSION CAVEAT: FLUX 3 entered Early Access on July 23, 2026 as a multimodal image/video/audio foundation model, but at announcement only its video capability was live, with image generation stated to follow 'in the following weeks'. It is unconfirmed whether FLUX 3 image generation is available yet, so every limit and parameter here describes FLUX.2 (November 2025), which remains the model to actually target for images. FLUX.2 accepts 32K tokens of text input; the equivalent character count is unverified so maxChars is null. Negative-prompt support is not documented for FLUX.2 and is set false; the architecture historically has not exposed one. Several parameter details were cross-referenced through third-party API documentation because BFL's own reference pages blocked direct fetching."
+      "notes": "kind was changed from image to video on July 31, 2026. FLUX 3 launched July 23, 2026 as a multimodal image/video/audio/action model, but the only generation surface that actually exists is FLUX 3 Video (native audio, gated early access) — BFL's FLUX 3 Image early access had still not opened as of this update, so 'FLUX 3' as a target today means video with sound. For stills, target FLUX.2 rather than this profile; the previous revision of this entry described FLUX.2 limits and those have been removed to avoid implying they apply to FLUX 3. UNVERIFIED, left null or false: max prompt length, fps, the aspect-ratio enum (support is reported to span 9:16 through 21:9 but no explicit list is published), seed support, and negative-prompt support. Booleans in features are set false where a capability is undocumented rather than confirmed absent — treat false as 'do not rely on it'. BFL has published no API parameter reference for FLUX 3, so duration, resolution and reference-count values here are cross-referenced from hosting providers and early-access reporting, and parameter names are indicative rather than exact."
     },
     {
       "id": "seedance-2",
@@ -189,32 +188,35 @@
       "kind": "video",
       "dialect": {
         "style": "cinematic-prose",
-        "guidance": "Write a single descriptive passage covering subject, action, setting and mood — MiniMax takes free text rather than a rigid labeled schema. Camera work is the exception and has its own syntax: place bracketed directional commands inline, such as [Push in] or [Truck left, Pan right], drawn from the documented set of moves, and keep it to about three commands per bracket at most or the motion smears. The built-in prompt optimizer rewrites your text by default, which helps loose prompts and hurts precisely art-directed ones, so disable it when you have already specified the shot carefully. Keep the whole prompt under the 2,000-character ceiling and spend that budget on physical specifics — what moves, in what direction, lit by what — rather than on mood adjectives. Do not write dialogue expecting it to be spoken unless you have confirmed native audio on the model version you are targeting."
+        "guidance": "Write the prompt as production paperwork, not a single mood sentence: give every reference file an explicit role ('image 1 is the talent, image 2 sets the wardrobe, clip 1 is the motion to match'), then lay the action out as timed beats ('0-5s she crosses to the window, 5-12s she turns to camera'), then the look, then the sound, then whatever must stay locked. Direct audio as its own track — name the dialogue lines, the specific effects and where each music cue lands — because sound is generated in the same pass as picture, and anything you leave unwritten gets chosen for you. Camera work is plain professional shot language now ('slow orbit right', 'handheld tracking shot'); the bracketed director commands used by earlier Hailuo releases are not the documented interface for this model. The prompt field holds 7,000 characters, so spend the budget on physical specifics — what moves, in which direction, lit by what — rather than stacking mood adjectives. Because a single generation can carry multiple shots, keep character traits written into the prompt (hair, wardrobe, expression) alongside the identity reference rather than trusting the image alone. When a take is nearly right, use instruction-based editing to change the one element instead of re-rolling the whole shot."
       },
       "limits": {
-        "maxChars": 2000,
-        "maxDurationSec": 10,
-        "durations": [6, 10],
-        "aspectRatios": null,
-        "fps": null,
-        "resolutions": ["512P", "768P", "1080P"]
+        "maxChars": 7000,
+        "maxDurationSec": 15,
+        "durations": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+        "aspectRatios": ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16", "auto"],
+        "fps": 24,
+        "resolutions": ["1440p (2K)"]
       },
       "features": {
         "negativePrompt": false,
-        "timecodeBeats": false,
+        "timecodeBeats": true,
         "imageInput": true,
         "cameraControls": true,
         "seeds": false
       },
       "params": [
-        { "name": "model", "type": "enum", "values": ["MiniMax-Hailuo-2.3", "MiniMax-Hailuo-2.3-Fast", "MiniMax-Hailuo-02"], "note": "The H3 model identifier was not confirmed in MiniMax's published docs." },
-        { "name": "duration", "type": "enum", "values": [6, 10], "note": "1080P is available at 6s only; 10s requires 768P." },
-        { "name": "resolution", "type": "enum", "values": ["512P", "768P", "1080P"], "note": "512P is available on Hailuo-02 only." },
-        { "name": "prompt_optimizer", "type": "boolean", "values": ["default true"], "note": "Auto-rewrites the prompt. Turn off for precisely art-directed shots." },
-        { "name": "fast_pretreatment", "type": "boolean", "values": ["default false"], "note": "Speed-versus-quality toggle, separate from prompt_optimizer." },
-        { "name": "first_frame_image", "type": "string", "note": "Start-frame conditioning for image-to-video. Input image aspect ratio must fall roughly between 2:5 and 5:2." }
+        { "name": "model", "type": "enum", "values": ["MiniMax-H3"], "note": "Hosted API model id, live from July 31, 2026. Some third-party hosts expose the same model as 'hailuo-03'." },
+        { "name": "duration", "type": "number", "values": ["5-15"], "note": "Any whole second. Some API resellers list a 4s floor; the lower bound is not confirmed by MiniMax. A separate Extend Video tool is reported to carry a clip to roughly 30s." },
+        { "name": "resolution", "type": "enum", "values": ["1440p (2K)", "768p"], "note": "2K (1440-pixel short edge) is the generally available tier. A cheaper 768p tier is announced but reported as closed beta, so it is not listed under limits." },
+        { "name": "aspect_ratio", "type": "enum", "values": ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16", "auto"], "note": "Text-to-video requires a fixed ratio; image-to-video defaults to adaptive. Input images must fall between 2:5 and 5:2." },
+        { "name": "reference_files", "type": "list", "note": "Omni-reference: up to 12 files total — 9 images, 3 video clips (2-15s each, 15s combined) and 3 audio clips (15s combined). Audio cannot be sent alone; it must accompany an image or video." },
+        { "name": "audio", "type": "boolean", "values": ["always on"], "note": "Native synchronized stereo — dialogue, effects and room tone in the same pass as picture. Voice cloning and voice transfer from an audio reference are reported." },
+        { "name": "editing", "type": "string", "note": "Instruction-based editing and motion transfer: swap a subject or background, relight, add an effect or replace a line without regenerating the whole shot." },
+        { "name": "prompt_optimizer", "type": "boolean", "values": ["default true on Hailuo 2.3"], "note": "Documented for Hailuo 2.3; not confirmed to exist on H3. Do not assume the prompt is passed through untouched." },
+        { "name": "seed", "type": "number", "note": "Not documented for H3." }
       ],
-      "notes": "VERSION CAVEAT: MiniMax H3 (marketed as Hailuo 3.0) was unveiled July 17, 2026 and reported as released July 31, 2026, but was not yet listed on MiniMax's own published model docs at the time of writing. Every verified limit here therefore comes from Hailuo 2.3, the newest officially documented model. H3's claimed specs — native 2K at 24fps, 5-15s extendable to about 30s, aspect ratios from 21:9 to 9:16, up to 12 reference files, and native synchronized audio — are all unverified and deliberately not encoded above. Hailuo 2.3 generates silent video only; narration requires MiniMax's separate speech product. Negative-prompt support, seed control, output aspect ratios and fps are undocumented for 2.3 and are left false or null rather than guessed."
+      "notes": "Updated July 31, 2026, the day MiniMax H3 (Hailuo 3.0) shipped; the hosted API is live under model id MiniMax-H3. The previous revision described Hailuo 2.3 as a stand-in and those limits have been replaced — H3 is a real jump: native 2K at 24fps, 5-15s, six fixed aspect ratios plus adaptive, a 7,000-character prompt field, omni-reference (up to 12 mixed image/video/audio files), and native synchronized audio including spoken dialogue, so narration no longer needs MiniMax's separate speech product. timecodeBeats is true because timed beat ranges inside the prompt are part of the documented prompting method, and multiple shots can occur within one generation. UNVERIFIED: seed support and negative-prompt support (both undocumented, left false — read false as 'do not rely on it'); whether prompt_optimizer and fast_pretreatment survive on H3; the exact duration floor (4s vs 5s is reported inconsistently, so limits.durations starts at the conservative 5); and the availability of the announced 768p tier. MiniMax's own API reference still listed only Hailuo-2.3 and Hailuo-02 at the time of writing, so parameter names come from vendor product pages and hosting providers and may differ in the official reference."
     },
     {
       "id": "ltx-2.3",

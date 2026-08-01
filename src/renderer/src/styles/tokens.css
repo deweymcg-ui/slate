@@ -1,53 +1,63 @@
-/* Slate design tokens — dark cinematic. Tungsten key against cool slate shadows. */
+/* Slate design tokens — dark cinematic, precision-grade.
+   A tungsten practical glowing against a graded, near-black stage. */
 
 :root {
-  /* Surfaces — cool near-black with blue undertone, like an unlit stage */
-  --bg-0: #0c0d10;
-  --bg-1: #101216;
-  --bg-2: #15181d;
-  --bg-3: #1b1f26;
-  --bg-raised: #20242c;
-  --border: #262b34;
-  --border-strong: #333a46;
+  /* Surfaces — layered elevation, cool blue-grey undertone */
+  --bg-0: #0a0b0d;
+  --bg-1: #0e1013;
+  --bg-2: #13161a;
+  --bg-3: #191d23;
+  --bg-raised: #20252d;
+
+  /* Hairlines & separators */
+  --border: rgba(255, 255, 255, 0.065);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --hairline: rgba(255, 255, 255, 0.045);
 
   /* Ink */
-  --ink-0: #f2f4f7;
-  --ink-1: #c8cdd6;
-  --ink-2: #8b93a1;
-  --ink-3: #5c6472;
+  --ink-0: #f4f6f9;
+  --ink-1: #c9cfd9;
+  --ink-2: #8e97a6;
+  --ink-3: #5b6371;
 
-  /* Tungsten accent — a practical lamp in the dark */
-  --key: #e3b341;
-  --key-bright: #f2c855;
-  --key-dim: #a8842e;
-  --key-ghost: rgba(227, 179, 65, 0.12);
+  /* Tungsten key — the one warm thing in the room */
+  --key: #e6b64c;
+  --key-bright: #f5cd66;
+  --key-deep: #c2922f;
+  --key-dim: #9c7c2e;
+  --key-ghost: rgba(230, 182, 76, 0.11);
+  --key-glow: rgba(230, 182, 76, 0.35);
 
-  /* Signal colors */
-  --cool: #56b8c9;
-  --ok: #6dbf7e;
-  --warn: #d98e4a;
-  --danger: #d96a6a;
+  /* Signal */
+  --cool: #5cbecf;
+  --ok: #71c584;
+  --warn: #dd9350;
+  --danger: #e07272;
 
   /* Syntax categories */
-  --syn-section: #8b93a1;
-  --syn-camera: #56b8c9;
-  --syn-lighting: #e3b341;
-  --syn-color: #c886c8;
-  --syn-motion: #6dbf7e;
-  --syn-mood: #9d8cff;
-  --syn-technical: #7aa2e8;
+  --syn-section: #99a3b2;
+  --syn-camera: #5cbecf;
+  --syn-lighting: #e6b64c;
+  --syn-color: #cf8ecf;
+  --syn-motion: #71c584;
+  --syn-mood: #a394ff;
+  --syn-technical: #7fa8ef;
 
   /* Type */
   --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* Rhythm */
-  --r-sm: 6px;
-  --r-md: 10px;
-  --r-lg: 14px;
-  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-2: 0 8px 28px rgba(0, 0, 0, 0.5);
-  --shadow-key: 0 0 0 1px var(--key-ghost), 0 4px 18px rgba(227, 179, 65, 0.08);
+  /* Geometry */
+  --r-sm: 7px;
+  --r-md: 11px;
+  --r-lg: 15px;
 
-  --ease: cubic-bezier(0.25, 0.7, 0.3, 1);
+  /* Depth */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+  --shadow-2: 0 16px 48px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-key: 0 0 0 1px var(--key-ghost), 0 6px 24px rgba(230, 182, 76, 0.10);
+  --inset-hi: inset 0 1px 0 rgba(255, 255, 255, 0.055);
+
+  --ease: cubic-bezier(0.22, 0.68, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.3, 0.5, 1);
 }

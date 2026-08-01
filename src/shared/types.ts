@@ -176,6 +176,12 @@ export interface ProjectDefaults {
   brain: 'claude' | 'codex'
 }
 
+export interface ChatMsg {
+  role: 'user' | 'assistant'
+  text: string
+  receipts?: string[]
+}
+
 export interface Project {
   id: string
   name: string
@@ -189,6 +195,7 @@ export interface Project {
   lookbook: StyleProfile[]
   references: Reference[]
   mySetups: CustomSetup[]
+  copilot?: ChatMsg[]
   createdAt: string
   updatedAt: string
 }
