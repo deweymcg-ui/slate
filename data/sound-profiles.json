@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "music": [
+    {
+      "id": "suno",
+      "label": "Suno v5.5",
+      "vendor": "Suno",
+      "dialect": {
+        "guidance": "Treat the Style field as a comma-separated stack of descriptors rather than a sentence, and keep the order stable across a project: genre and subgenre first, then era or production character, then mood and energy, then vocal type, then the two or three defining instruments, then tempo. Roughly eight to fifteen descriptors is the productive range; piling on more instruments than that tends to muddy the arrangement rather than enrich it. Specific compound phrases ('gritty nineties boom bap, vinyl-sampled, chopped breaks') steer far harder than a single bare genre word, so spend the budget on texture and production detail. Lyrics belong in their own field, not in the style text, with bracketed section labels such as [Intro], [Verse], [Pre-Chorus], [Chorus], [Bridge], [Guitar Solo] and [Outro] on their own lines. Section labels accept a colon and a short modifier, as in [Chorus: layered harmonies, doubled vocal], but they are probabilistic hints rather than commands, so regenerate or simplify the wording when one is ignored. Write tempo and key into the style text ('112 BPM, in D minor') since there is no separate numeric field, and reach for the instrumental toggle instead of asking for no vocals in prose."
+      },
+      "limits": { "maxChars": 1000, "maxDurationSec": null },
+      "features": {
+        "lyrics": true,
+        "instrumental": true,
+        "structureTags": true,
+        "bpmControl": true,
+        "referenceAudio": true,
+        "stems": true
+      },
+      "notes": "v5.5 shipped 26 March 2026 and is still the current model as of late July 2026; it is a personalization layer over the v5 engine, adding Voices (sing on your own tracks), Custom Models (train on at least six of your own tracks) and My Taste. A duration slider reached the web app in July 2026, but no official maximum song length is published, so maxDurationSec is null; eight minutes for current core models is widely reported and unverified. The 1000-character style cap (alongside a reported 5000 for lyrics and 100 for title) comes from community documentation rather than an official spec page — treat it as a working ceiling and aim far lower, since concise style strings of 100-300 characters generally sound better. bpmControl is true only in the sense that tempo written into the style text is honored; there is no numeric tempo control in the create form. Stem export (reported as up to twelve time-aligned WAV stems) and audio upload, cover and persona features sit on paid tiers. Suno settled with Warner in late 2025 and has signalled a move to licensed-data models during 2026, so model names, download rights and export limits may shift — re-verify before committing a film deliverable."
+    },
+    {
+      "id": "elevenlabs-music",
+      "label": "Eleven Music v2",
+      "vendor": "ElevenLabs",
+      "dialect": {
+        "guidance": "There are two mutually exclusive modes: a single prose prompt, or a composition plan — never both in the same request. For the prose prompt, lead with intent or use case ('title-sequence bed for a coastal noir'), then genre, then instrumentation, then vocal treatment, then tempo and key; the model reads intent well, so short evocative prompts often beat exhaustive ones. Use 'solo' ahead of an instrument and 'a cappella' ahead of voices, describe vocals with delivery words like breathy, raw or aggressive, and say 'instrumental only' (or set the instrumental flag) when you want no singing. For a composition plan, write an ordered list of chunks, each with its own duration in milliseconds, a positive style list and an optional negative style list; the first chunk's styles set the tone and genre for the whole track, so give it six or seven descriptors before anything else. Chunk text carries the section label in brackets plus the lyric lines, with parenthesised sounds for non-word vocalisations and curly braces for inline performance directions. Style descriptors must be written in English even when the lyrics are in another language, and naming a real band, artist or copyrighted lyric will be rejected outright rather than softened."
+      },
+      "limits": { "maxChars": null, "maxDurationSec": 600 },
+      "features": {
+        "lyrics": true,
+        "instrumental": true,
+        "structureTags": true,
+        "bpmControl": true,
+        "referenceAudio": true,
+        "stems": true
+      },
+      "notes": "The compose endpoint documents music length between 3,000 and 600,000 ms, which is the 600-second figure used here; the consumer-facing capability page describes a 3-second-to-5-minute range, so the ten-minute ceiling may be API-only — verify against whichever surface you are pasting into. Composition plans allow up to 30 chunks, each between 3 and 120 seconds, with up to 50 positive and 50 negative style descriptors per chunk and a per-chunk context-adherence setting of low, medium or high. No prompt character limit is published, hence null. Section-level regeneration (inpainting) requires the song to have been stored for editing at generation time. Stem separation is a paid add-on billed as a fraction of generation cost, and an audio reference of roughly thirty seconds can steer style. Set the model explicitly if you want v2 — older integrations still default to v1."
+    },
+    {
+      "id": "lyria",
+      "label": "Lyria (Google Flow Music)",
+      "vendor": "Google",
+      "dialect": {
+        "guidance": "Write a natural-language sentence or two rather than a tag stack: name the genre, the tempo feel, the mood, the lead instrumentation and the vocal type in one flowing description, the way you would brief a composer. Describe song structure in prose — 'opens on solo piano, strings enter under the second verse, crescendo into a doubled final chorus' — because bracketed section labels are not part of this tool's documented vocabulary. For lyrics you have two routes: hand it a theme and let it write ('a song about leaving a coastal town before dawn'), or supply your exact lines in quotes to be performed as written. Optional soundscape or ambience language ('distant rain, wide room reverb') colors the mix without derailing the arrangement. Reference material can be attached as audio or images alongside the text, and editing is conversational — select a section and describe the change ('shorten the intro to four bars', 'make the kick punchier', 'restyle this verse as acoustic folk') instead of rewriting the whole prompt. Keep requests original: asking for a named artist's voice, a protected melody or a brand soundalike is explicitly discouraged."
+      },
+      "limits": { "maxChars": null, "maxDurationSec": null },
+      "features": {
+        "lyrics": true,
+        "instrumental": true,
+        "structureTags": false,
+        "bpmControl": true,
+        "referenceAudio": true,
+        "stems": true
+      },
+      "notes": "Lyria 3.5 began rolling out in Google Flow Music on 29 July 2026, replacing Lyria 3 Pro, with stated gains in melodic structure, lyric quality and prompt adherence, vocal realism and pronunciation, plus easier control over tempo and duration. Flow Music itself launched in April 2026 out of Google Labs. Neither a prompt character cap nor a maximum track length is published, so both limits are null — the interface exposes tempo and length controls but their ranges are not documented. Stem splitting is reported inside Flow Music (including its Spaces surface) along with generation, editing and lyric tooling; treat that as reported rather than spec'd. instrumental is marked true because it is requested in the prompt text; no dedicated instrumental toggle is documented. Do not confuse this with the Lyria endpoints exposed through Google Cloud, which are a separate, more instrumental-oriented surface with their own parameters."
+    },
+    {
+      "id": "udio",
+      "label": "Udio",
+      "vendor": "Udio",
+      "dialect": {
+        "guidance": "Udio responds better to a blend of natural language and production vocabulary than to a dense stack of bracketed tags: genre modifiers, era cues and mixing descriptors carry most of the weight, so 'warm seventies soul ballad, tape saturation, close-mic'd baritone, Rhodes and brushed drums' outperforms a list of bare tags. Lyrics are handled as an explicit choice between auto-written, your own custom text, or instrumental, and bracketed section labels such as [Verse], [Chorus] and [Guitar Solo] are recognised inside custom lyrics. The natural workflow is short-clip-then-extend: generate a strong opening section, then extend from the tail with a fresh prompt describing what should happen next ('guitar solo, then final chorus a step up'), which gives you arrangement control a single prompt cannot. Keep each prompt internally consistent — stacking contradictory genres blurs the result rather than fusing them. Because prompts are re-supplied on every extension, keep a short reusable style string so the sonic identity stays fixed across sections. Verify current behaviour before relying on it: the platform is mid-transition and its feature set is moving."
+      },
+      "limits": { "maxChars": null, "maxDurationSec": null },
+      "features": {
+        "lyrics": true,
+        "instrumental": true,
+        "structureTags": true,
+        "bpmControl": false,
+        "referenceAudio": true,
+        "stems": true
+      },
+      "notes": "Udio is not dead, but it is not stable either — include this profile with the caveat attached. Universal settled its infringement suit and signed licensing agreements in late 2025, Warner followed, and deals with Merlin and Kobalt were announced through early 2026; Sony litigation was still open, with US fair-use rulings pushed toward 2027. The publicly stated plan is to retire the current model during 2026 and relaunch as a fully licensed service oriented toward remixes, covers and artist-voice collaborations inside a walled garden where creations are not downloadable or postable off-platform, while the legacy product stays available during the transition with fingerprinting and filtering applied. Every feature flag here describes the legacy product and is unverified for the relaunched service; downloads and stem export in particular were restricted during the transition, so confirm export rights before planning a deliverable around it. No official prompt character cap or maximum track length is published, hence nulls; clip lengths and totals vary by tier."
+    },
+    {
+      "id": "stable-audio",
+      "label": "Stable Audio 2.5",
+      "vendor": "Stability AI",
+      "dialect": {
+        "guidance": "Write descriptively rather than instructively — describe the sound that should exist, not the action you want taken, since acoustic targets produce far more consistent results than commands. Order the prompt as core style and genre, then the defining instruments, then mood and emotion, then production texture and space, then the technical tail. Put tempo in the technical tail as an explicit number ('96 BPM'), which meaningfully tightens rhythmic alignment; the vendor guidance leans heavily on BPM ranges by genre. This is a scoring and sound-design engine, not a songwriting one: there is no lyric input, and any vocal-sounding material comes out as texture — chops, chants, wordless pads — so write toward beds, loops, stings and ambience. A negative prompt is available and is worth using for quality control ('low quality, muddy, clipping') as well as for excluding instruments you do not want. For variations that keep part of an existing piece, use the audio-to-audio and inpainting path with an uploaded reference and a chosen start point rather than trying to re-describe the original from scratch."
+      },
+      "limits": { "maxChars": null, "maxDurationSec": 180 },
+      "features": {
+        "lyrics": false,
+        "instrumental": true,
+        "structureTags": false,
+        "bpmControl": true,
+        "referenceAudio": true,
+        "stems": false
+      },
+      "notes": "Current as of July 2026 and offered through Stability's own API plus third-party hosts; the vendor prompt guide describes the model as designed for tracks up to three minutes, which is the 180 seconds recorded here — per-request duration caps can differ by host, so confirm on whichever surface you use. No prompt character limit is published, hence null. Lyrics and true lead vocals are explicitly out of scope for this model. Musical key is commonly recommended in third-party prompt guides but the vendor guide covers BPM without addressing key, so treat key adherence as unverified. Audio inpainting and audio-to-audio are supported for preserving one part of a track while regenerating the rest; stem export is not a documented feature of the model itself."
+    }
+  ],
+  "voice": [
+    {
+      "id": "elevenlabs-voice",
+      "label": "ElevenLabs Voice Design v3",
+      "vendor": "ElevenLabs",
+      "dialect": {
+        "guidance": "Pack everything into one dense description rather than spreading attributes across sentences, and follow a consistent skeleton: native language or dialect, then gender and age range, then an explicit audio-quality grade, then a two-to-five-word persona, then two or three emotion adjectives, then one or two sentences on timbre, pacing and delivery. Quality grading is literal and honored, so stating 'perfect audio quality' (or deliberately asking for a degraded, radio-thin, or telephone sound) is one of the highest-leverage phrases available. Granularity pays: 'middle-aged New Yorker, rising intonation, half-smile in the delivery, unhurried' lands closer than 'friendly man'. Supply your own preview text instead of accepting auto-generated sample text, and make it a real line the character would say — short fragments read as clipped and misrepresent the voice. Each request returns several candidates to audition, so treat this as casting: pick the closest take, change exactly one attribute, and regenerate rather than rewriting the whole description. A prompt-adherence control is available for pushing the result harder toward the description, at the cost of sounding synthetic if pushed too far."
+      },
+      "limits": { "maxChars": 1000 },
+      "features": {
+        "voiceDesign": true,
+        "cloning": true,
+        "emotionTags": true,
+        "multilingual": true
+      },
+      "notes": "The voice description is documented as 20-1000 characters and the optional preview text as 100-1000 characters; the 100-character minimum on preview text is a hard floor that trips people up, while the 20-character description minimum is reported consistently but was not visible as an explicit constraint on the docs page, so treat it as approximate. Two model ids are exposed — a multilingual text-to-voice v2 (default) and a v3 text-to-voice — and only the v3 path accepts a reference-audio input with a prompt-strength control. Designed voices are compatible with the v3 speech model's inline audio tags for per-line expressive delivery, which is the practical route to emotion once a voice exists. Cloning is a separate product line (quick and professional tiers) rather than part of voice design, and professional clones were documented as not yet supported by the v3 speech model. Loudness and seed parameters exist for repeatability across a series."
+    },
+    {
+      "id": "hume-octave",
+      "label": "Hume Octave",
+      "vendor": "Hume AI",
+      "dialect": {
+        "guidance": "Octave takes two inputs that are read together — a natural-language voice prompt and a block of sample text — so write them as a matched pair rather than treating the sample as filler. The voice prompt should cover identity (personality, tone, emotional quality), delivery (pace, clarity, intensity) and context (setting, role, intent); both elaborate narrative descriptions and terse adjective stacks work, so pick whichever suits the character and stay consistent. Because the model reads the meaning of what it is saying, the sample text does real work: give it a line the character would genuinely speak, in the register you intend, and the performance shifts to match. Acting direction lives inside the prompt rather than in a separate emotion field — phrases like 'with maximum disdain' or 'building to breathless enthusiasm' are interpreted as performance notes. Keep the input clean prose with standard punctuation: emoji, markdown and HTML markup degrade the read rather than being ignored. Iterate by adjusting the description and the sample line together, since a mismatch between a warm description and a hostile line produces an averaged, muddy result."
+      },
+      "limits": { "maxChars": null },
+      "features": {
+        "voiceDesign": true,
+        "cloning": false,
+        "emotionTags": true,
+        "multilingual": true
+      },
+      "notes": "Octave is a speech-language model built for text-to-speech rather than a conventional TTS engine, which is why context and meaning affect delivery. No character limits are published for either the voice prompt or the sample text, hence null. Emotion control is real but is expressed as acting instructions in prose, not as bracketed tags. Multilingual output is supported, though multilingual voice design specifically was listed as coming soon for the Octave 2 generation, with Octave 1 voices usable in Octave 2 requests — verify language coverage for your target before committing. cloning is set false because the voice design documentation does not describe a cloning path; this is an absence of evidence rather than a confirmed absence of the feature, so check current docs if cloning matters to your workflow."
+    },
+    {
+      "id": "minimax-voice-design",
+      "label": "MiniMax Voice Design",
+      "vendor": "MiniMax",
+      "dialect": {
+        "guidance": "Write the description as a compact casting note in a single string: role or persona first, then gender and rough age, then emotional register, then pacing and energy, then any distinguishing speaking habit — the vendor's own example reads like a one-line character brief for a product reviewer. Concrete occupational or archetypal framing ('late-night radio host', 'field medic under pressure') gives the model more to grip than abstract adjectives alone. The preview text is a separate required field whose only job is to audition the voice, so write an actual line of your script rather than filler, and keep it inside the 500-character ceiling. A successful design returns a reusable voice identifier, so treat the description as a one-time casting step and keep the identifier alongside the character in your project notes. Fine-grained emotion and speaking style are applied later at synthesis time rather than being baked into the description, so keep the description about who the speaker is and leave per-line performance to the speech request. Multilingual output with code-switching is supported, so state the target language explicitly if the character is not speaking English."
+      },
+      "limits": { "maxChars": null },
+      "features": {
+        "voiceDesign": true,
+        "cloning": true,
+        "emotionTags": true,
+        "multilingual": true
+      },
+      "notes": "The API requires a description string and a preview text string; the preview text is documented with a 500-character maximum, while no limit is published for the description itself, hence maxChars null. Preview generation is billed by character, so avoid auditioning with long passages. Cloning exists as a separate reference-audio endpoint distinct from text-based voice design. Emotion and style parameters live on the speech synthesis request rather than the design request. Language coverage in the low-thirties is reported for the underlying speech models — treat the exact count as unverified. Availability spans MiniMax's own platform API and several third-party model hosts, and parameter names differ slightly between them."
+    }
+  ]
+}

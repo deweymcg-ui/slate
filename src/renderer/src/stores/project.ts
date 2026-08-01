@@ -99,6 +99,10 @@ interface ProjectState {
   removeReference(id: string): void
   upsertSetup(s: CustomSetup): void
   removeSetup(id: string): void
+  upsertMusic(m: import('../../../shared/types').MusicCue): void
+  removeMusic(id: string): void
+  upsertVoice(v: import('../../../shared/types').VoiceSheet): void
+  removeVoice(id: string): void
 }
 
 export const useProject = create<ProjectState>((set, get) => ({
@@ -324,6 +328,32 @@ export const useProject = create<ProjectState>((set, get) => ({
   removeSetup(id) {
     get().mutate((p) => {
       p.mySetups = p.mySetups.filter((x) => x.id !== id)
+    })
+  },
+  upsertMusic(m) {
+    get().mutate((p) => {
+      p.music = p.music ?? []
+      const i = p.music.findIndex((x) => x.id === m.id)
+      if (i >= 0) p.music[i] = m
+      else p.music.push(m)
+    })
+  },
+  removeMusic(id) {
+    get().mutate((p) => {
+      p.music = (p.music ?? []).filter((x) => x.id !== id)
+    })
+  },
+  upsertVoice(v) {
+    get().mutate((p) => {
+      p.voices = p.voices ?? []
+      const i = p.voices.findIndex((x) => x.id === v.id)
+      if (i >= 0) p.voices[i] = v
+      else p.voices.push(v)
+    })
+  },
+  removeVoice(id) {
+    get().mutate((p) => {
+      p.voices = (p.voices ?? []).filter((x) => x.id !== id)
     })
   }
 }))

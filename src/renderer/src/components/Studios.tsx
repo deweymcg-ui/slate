@@ -3,9 +3,10 @@
 import React, { useState } from 'react'
 import { useProject, uid } from '../stores/project'
 import { fillCharacter, characterSheetPrompt, studyStyle } from '../lib/brainTasks'
+import SoundDept from './SoundDept'
 import type { CharacterSheet, ArtDeptSheet, LocationSheet, StyleProfile, ScenarioTab } from '../../../shared/types'
 
-type Section = 'casting' | 'art' | 'locations' | 'lookbook'
+type Section = 'casting' | 'art' | 'locations' | 'lookbook' | 'sound'
 
 export default function Studios(): React.JSX.Element {
   const [section, setSection] = useState<Section>('casting')
@@ -17,7 +18,8 @@ export default function Studios(): React.JSX.Element {
             ['casting', 'Casting'],
             ['art', 'Art Dept'],
             ['locations', 'Locations'],
-            ['lookbook', 'Lookbook']
+            ['lookbook', 'Lookbook'],
+            ['sound', 'Sound']
           ] as Array<[Section, string]>
         ).map(([id, label]) => (
           <button key={id} className={`tab ${section === id ? 'active' : ''}`} onClick={() => setSection(id)}>
@@ -29,6 +31,7 @@ export default function Studios(): React.JSX.Element {
       {section === 'art' && <ArtDept />}
       {section === 'locations' && <Locations />}
       {section === 'lookbook' && <Lookbook />}
+      {section === 'sound' && <SoundDept />}
     </>
   )
 }

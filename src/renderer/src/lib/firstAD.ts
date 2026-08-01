@@ -47,6 +47,8 @@ export type AdAction =
   | { type: 'add_character'; [k: string]: unknown }
   | { type: 'add_location'; [k: string]: unknown }
   | { type: 'add_art'; [k: string]: unknown }
+  | { type: 'add_music_cue'; [k: string]: unknown }
+  | { type: 'add_voice'; [k: string]: unknown }
   | { type: 'select'; scene?: string; shot?: string }
 
 export interface AdReply {
@@ -64,6 +66,8 @@ const ACTION_DOC = `ACTIONS — when (and only when) the director's intent is cl
 - {"type":"add_character","name","age"?,"gender"?,"ethnicity"?,"faceFeatures"?,"hair"?,"clothing"?,"expression"?,"eyeDirection"?,"mood"?,"environment"?,"keyLightSide"?,"lightingMood"?}
 - {"type":"add_location","name","interiorExterior"?("interior"|"exterior"|"both"),"description"?,"timeOfDay"?,"weather"?,"architecture"?,"textures"?,"practicalLights"?}
 - {"type":"add_art","kind"("prop"|"wardrobe"|"vehicle"),"name","description"?,"materials"?,"condition"?,"era"?,"distinctive"?}
+- {"type":"add_music_cue","name","sceneRef"?,"intent"?,"genre"?,"mood"?,"tempo"?,"instrumentation"?,"era"?,"structure"?,"vocals"?("instrumental"|"vocals"|"either"),"lyricTheme"?,"durationSec"?:number}
+- {"type":"add_voice","name","characterName"?,"ageGender"?,"accent"?,"timbre"?,"pitch"?,"pacing"?,"energy"?,"texture"?,"emotionalRange"?,"sampleLine"?}
 - {"type":"select","scene"?:"<name or id>","shot"?:"<name or id>"} — focus the UI on something you created or changed
 
 Spec vocabulary: size EWS|WS|MWS|MS|MCU|CU|ECU|Insert; angle eye level|low|high|overhead|dutch|over-shoulder|POV; movement locked|handheld|push-in|pull-back|orbit|pan|tilt|track|crane|drone|steadicam; lens 14mm|24mm|35mm|50mm|85mm|135mm|anamorphic|macro|tilt-shift. targetModel ids: gpt-image-2, midjourney, krea, flux-3, seedance-2, minimax-h3, ltx-2.3, kling, sora, veo, comfyui.`
@@ -304,6 +308,51 @@ export function applyAdActions(p: Project, actions: AdAction[]): ApplyResult {
             notes: ''
           })
           receipts.push(`✓ Added ${kind || 'prop'} "${str(a.name)}"`)
+          break
+        }
+        case 'add_music_cue': {
+          p.music = p.music ?? []
+          const vocals = str(a.vocals)
+          p.music.push({
+            id: uid('cue'),
+            name: str(a.name) || 'Untitled cue',
+            sceneRef: str(a.sceneRef),
+            intent: str(a.intent),
+            genre: str(a.genre),
+            mood: str(a.mood),
+            tempo: str(a.tempo),
+            instrumentation: str(a.instrumentation),
+            era: str(a.era),
+            structure: str(a.structure),
+            vocals: vocals === 'vocals' || vocals === 'either' ? (vocals as 'vocals' | 'either') : 'instrumental',
+            lyricTheme: str(a.lyricTheme),
+            lyrics: '',
+            durationSec: typeof a.durationSec === 'number' ? a.durationSec : null,
+            notes: ''
+          })
+          receipts.push(`✓ Spotted cue "${str(a.name)}"`)
+          break
+        }
+        case 'add_voice': {
+          p.voices = p.voices ?? []
+          const charName = str(a.characterName).toLowerCase()
+          const character = charName ? p.characters.find((c) => c.name.toLowerCase() === charName) : undefined
+          p.voices.push({
+            id: uid('voice'),
+            name: str(a.name) || 'Unnamed voice',
+            characterId: character?.id ?? null,
+            ageGender: str(a.ageGender),
+            accent: str(a.accent),
+            timbre: str(a.timbre),
+            pitch: str(a.pitch),
+            pacing: str(a.pacing),
+            energy: str(a.energy),
+            texture: str(a.texture),
+            emotionalRange: str(a.emotionalRange),
+            sampleLine: str(a.sampleLine),
+            notes: ''
+          })
+          receipts.push(`✓ Cast voice "${str(a.name)}"`)
           break
         }
         case 'select': {

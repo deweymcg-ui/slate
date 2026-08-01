@@ -59,6 +59,14 @@ export function projectContext(p: Project, scene?: Scene | null): string {
     for (const s of p.lookbook)
       lines.push(`- ${s.source}: tone ${s.tone}; palette ${s.palette}; lighting ${s.lighting}; lenses ${s.lensLanguage}; movement ${s.movement}`)
   }
+  if (p.music?.length) {
+    lines.push('\nSCORE (music cues):')
+    for (const m of p.music) lines.push(`- ${m.name}${m.sceneRef ? ` (${m.sceneRef})` : ''}: ${[m.genre, m.mood].filter(Boolean).join(', ')}`)
+  }
+  if (p.voices?.length) {
+    lines.push('\nVOICE CAST:')
+    for (const v of p.voices) lines.push(`- ${v.name}: ${[v.ageGender, v.accent, v.timbre].filter(Boolean).join(', ')}`)
+  }
   if (scene) {
     lines.push(`\nCURRENT SCENE: ${scene.name}${scene.synopsis ? ` — ${scene.synopsis}` : ''}`)
     if (scene.shots.length) {

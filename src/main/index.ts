@@ -11,6 +11,7 @@ import {
 } from './projects'
 import { startControlServer } from './control'
 import { extractFrames, mediaKind } from './ingest'
+import { analyzeAudio } from './audio'
 import type { BrainRequest, Project } from '../shared/types'
 
 let win: BrowserWindow | null = null
@@ -96,6 +97,21 @@ ipcMain.handle('media:ingest', async (_e, projectId: string, path: string) => {
   const frames = await extractFrames(projectId, path)
   return { kind, frames }
 })
+
+ipcMain.handle('media:pickAudio', async () => {
+  const res = await dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      {
+        name: 'Audio & Video',
+        extensions: ['mp3', 'wav', 'm4a', 'aac', 'flac', 'ogg', 'aif', 'aiff', 'mp4', 'mov', 'm4v', 'webm', 'mkv']
+      }
+    ]
+  })
+  return res.canceled ? [] : res.filePaths
+})
+
+ipcMain.handle('sound:analyze', (_e, path: string) => analyzeAudio(path))
 
 ipcMain.handle('clipboard:copy', (_e, text: string) => {
   clipboard.writeText(text)

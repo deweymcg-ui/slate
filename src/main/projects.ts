@@ -76,6 +76,8 @@ export function newProject(name: string): Project {
     lookbook: [],
     references: [],
     mySetups: [],
+    music: [],
+    voices: [],
     createdAt: now,
     updatedAt: now
   }

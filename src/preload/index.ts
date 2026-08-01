@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer, webUtils } from 'electron'
 import type { BrainRequest, Project, SlateApi } from '../shared/types'
 
 const api: SlateApi & { brainRunWith: (req: BrainRequest, backend: 'claude' | 'codex') => Promise<unknown> } = {
@@ -14,7 +14,10 @@ const api: SlateApi & { brainRunWith: (req: BrainRequest, backend: 'claude' | 'c
     ipcRenderer.invoke('brain:run', { ...req, backend }),
   brainCancel: (id: string) => ipcRenderer.invoke('brain:cancel', id),
   pickMedia: () => ipcRenderer.invoke('media:pick'),
+  pickAudio: () => ipcRenderer.invoke('media:pickAudio'),
   ingestMedia: (projectId: string, path: string) => ipcRenderer.invoke('media:ingest', projectId, path),
+  analyzeAudio: (path: string) => ipcRenderer.invoke('sound:analyze', path),
+  pathForFile: (file: File) => webUtils.getPathForFile(file),
   copyText: (text: string) => ipcRenderer.invoke('clipboard:copy', text),
   onProjectsChanged: (cb: () => void) => {
     const listener = (): void => cb()

@@ -72,6 +72,26 @@ describe('applyAdActions', () => {
     expect(receipts.some((r) => r.startsWith('✗ Shot "Nope" not found'))).toBe(true)
   })
 
+  it('spots music cues and casts voices, linking voices to characters by name', () => {
+    const p = freshProject()
+    applyAdActions(p, [
+      { type: 'add_character', name: 'Marlow' },
+      {
+        type: 'add_music_cue',
+        name: 'Vault Break-In',
+        genre: 'industrial pulse',
+        vocals: 'instrumental',
+        durationSec: 95
+      },
+      { type: 'add_voice', name: 'Marlow VO', characterName: 'marlow', accent: 'faded Chicago' }
+    ])
+    expect(p.music).toHaveLength(1)
+    expect(p.music![0].durationSec).toBe(95)
+    expect(p.music![0].vocals).toBe('instrumental')
+    expect(p.voices).toHaveLength(1)
+    expect(p.voices![0].characterId).toBe(p.characters[0].id)
+  })
+
   it('updates project bible and defaults', () => {
     const p = freshProject()
     applyAdActions(p, [

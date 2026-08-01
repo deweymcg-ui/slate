@@ -176,6 +176,55 @@ export interface ProjectDefaults {
   brain: 'claude' | 'codex'
 }
 
+export interface AudioFingerprint {
+  durationSec: number
+  sampledSec: number
+  bpmEstimate: number | null
+  bpmConfidence: 'low' | 'medium' | 'high'
+  pitchMedianHz: number | null
+  pitchSpreadSemitones: number | null
+  voicedRatio: number
+  brightness: 'dark' | 'balanced' | 'bright'
+  dynamicRangeDb: number
+  energyArc: string
+  silenceRatio: number
+  longestSilenceSec: number
+}
+
+export interface MusicCue {
+  id: string
+  name: string
+  sceneRef: string
+  intent: string
+  genre: string
+  mood: string
+  tempo: string
+  instrumentation: string
+  era: string
+  structure: string
+  vocals: 'instrumental' | 'vocals' | 'either'
+  lyricTheme: string
+  lyrics: string
+  durationSec: number | null
+  notes: string
+}
+
+export interface VoiceSheet {
+  id: string
+  name: string
+  characterId: string | null
+  ageGender: string
+  accent: string
+  timbre: string
+  pitch: string
+  pacing: string
+  energy: string
+  texture: string
+  emotionalRange: string
+  sampleLine: string
+  notes: string
+}
+
 export interface ChatMsg {
   role: 'user' | 'assistant'
   text: string
@@ -195,6 +244,8 @@ export interface Project {
   lookbook: StyleProfile[]
   references: Reference[]
   mySetups: CustomSetup[]
+  music?: MusicCue[]
+  voices?: VoiceSheet[]
   copilot?: ChatMsg[]
   createdAt: string
   updatedAt: string
@@ -250,7 +301,10 @@ export interface SlateApi {
   brainRun(req: BrainRequest): Promise<BrainResult>
   brainCancel(id: string): Promise<void>
   pickMedia(): Promise<string[]>
+  pickAudio(): Promise<string[]>
   ingestMedia(projectId: string, path: string): Promise<{ kind: 'image' | 'video'; frames: string[] }>
+  analyzeAudio(path: string): Promise<AudioFingerprint>
+  pathForFile(file: File): string
   copyText(text: string): Promise<void>
   revealProject(id: string): Promise<void>
   onProjectsChanged(cb: () => void): () => void

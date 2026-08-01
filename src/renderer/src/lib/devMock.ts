@@ -51,8 +51,17 @@ export function installDevMock(): void {
     async pickMedia() {
       return []
     },
+    async pickAudio() {
+      return []
+    },
     async ingestMedia() {
       return { kind: 'image' as const, frames: [] }
+    },
+    async analyzeAudio() {
+      throw new Error('Browser preview — audio analysis runs only in the desktop app.')
+    },
+    pathForFile() {
+      return ''
     },
     async copyText(text) {
       await navigator.clipboard.writeText(text).catch(() => undefined)
