@@ -45,7 +45,15 @@ You write (or direct) structured, sectioned shot prompts — **Subject · Compos
 
 ## Install
 
-Requires **Node 20+**, and **ffmpeg** on your PATH for clip/audio reference analysis (`brew install ffmpeg`).
+**macOS — one line:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/wassermanproductions/slate/main/install.sh | bash
+```
+
+Or grab `Slate-macOS.zip` from [Releases](../../releases), unzip, and drop `Slate.app` into Applications. (If macOS says the app "is damaged", that's Gatekeeper on unsigned browser downloads — the install script avoids it, or run `xattr -cr /Applications/Slate.app`.)
+
+**From source** — requires **Node 20+**, and **ffmpeg** on your PATH for clip/audio reference analysis (`brew install ffmpeg`):
 
 ```bash
 git clone https://github.com/wassermanproductions/slate.git

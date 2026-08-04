@@ -103,6 +103,8 @@ async function runSnap(): Promise<void> {
     js?: string
     wait?: number
     shot?: string
+    startRecord?: { fps?: number }
+    stopRecord?: string
   }>
   const w = new BrowserWindow({
     width: 1560,
@@ -119,10 +121,50 @@ async function runSnap(): Promise<void> {
   if (process.env.ELECTRON_RENDERER_URL) await w.loadURL(process.env.ELECTRON_RENDERER_URL)
   else await w.loadFile(join(__dirname, '../renderer/index.html'))
   await new Promise((r) => setTimeout(r, 900))
+
+  // Recording state: capture frames on an interval; each frame carries its
+  // real timestamp so assembly can be timestamp-accurate.
+  let recTimer: ReturnType<typeof setInterval> | null = null
+  let recFrames: Array<{ t: number; buf: Buffer }> = []
+  let capturing = false
+  const startRecord = (fps: number): void => {
+    recFrames = []
+    recTimer = setInterval(() => {
+      if (capturing) return
+      capturing = true
+      const t = Date.now()
+      void w.webContents
+        .capturePage()
+        .then((img) => {
+          recFrames.push({ t, buf: img.toJPEG(90) })
+        })
+        .finally(() => {
+          capturing = false
+        })
+    }, Math.round(1000 / fps))
+  }
+  const stopRecord = (name: string): void => {
+    if (recTimer) clearInterval(recTimer)
+    recTimer = null
+    const dir = join(outDir, name)
+    mkdirSync(dir, { recursive: true })
+    const meta: Array<{ file: string; t: number }> = []
+    recFrames.forEach((f, i) => {
+      const file = `f${String(i).padStart(5, '0')}.jpg`
+      writeFileSync(join(dir, file), f.buf)
+      meta.push({ file, t: f.t })
+    })
+    writeFileSync(join(dir, 'meta.json'), JSON.stringify(meta))
+    console.log('rec:', name, recFrames.length, 'frames')
+    recFrames = []
+  }
+
   for (const step of steps) {
     try {
+      if (step.startRecord) startRecord(step.startRecord.fps ?? 30)
       if (step.js) await w.webContents.executeJavaScript(step.js, true)
       if (step.wait) await new Promise((r) => setTimeout(r, step.wait))
+      if (step.stopRecord) stopRecord(step.stopRecord)
       if (step.shot) {
         const img = await w.webContents.capturePage()
         writeFileSync(join(outDir, `${step.shot}.png`), img.toPNG())
