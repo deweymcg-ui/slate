@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useProject } from '../stores/project'
+import type { BrainBackend } from '../../../shared/types'
 
 export default function Navigator(): React.JSX.Element {
   const store = useProject()
@@ -160,15 +161,74 @@ function ProjectMetaEditor(): React.JSX.Element {
             <select
               value={p.defaults.brain}
               onChange={(e) =>
-                store.mutate((proj) => void (proj.defaults.brain = e.target.value as 'claude' | 'codex'))
+                store.mutate((proj) => void (proj.defaults.brain = e.target.value as BrainBackend))
               }
             >
               <option value="claude">Claude Code (subscription)</option>
               <option value="codex">Codex CLI (subscription)</option>
+              <option value="local">Local model (offline)</option>
             </select>
           </div>
+          {p.defaults.brain === 'local' && <LocalBrainFields />}
         </div>
       )}
     </div>
+  )
+}
+
+function LocalBrainFields(): React.JSX.Element {
+  const store = useProject()
+  const p = store.project!
+  const [detected, setDetected] = useState<string | null>(null)
+  const [models, setModels] = useState<string[]>([])
+
+  useEffect(() => {
+    let live = true
+    void window.slate.localModels(p.defaults.localEndpoint || undefined).then((res) => {
+      if (!live) return
+      setDetected(res.endpoint)
+      setModels(res.models.map((m) => m.id))
+    })
+    return () => {
+      live = false
+    }
+  }, [p.defaults.localEndpoint])
+
+  return (
+    <>
+      <div className="field">
+        <label>Local server</label>
+        <input
+          value={p.defaults.localEndpoint ?? ''}
+          placeholder={detected ? `auto — found ${detected.replace(/^https?:\/\//, '')}` : 'auto — Ollama · LM Studio · vLLM · llama.cpp'}
+          onChange={(e) =>
+            store.mutate((proj) => void (proj.defaults.localEndpoint = e.target.value.trim()))
+          }
+        />
+      </div>
+      <div className="field">
+        <label>Local model</label>
+        {models.length > 0 ? (
+          <select
+            value={p.defaults.localModel || models[0]}
+            onChange={(e) => store.mutate((proj) => void (proj.defaults.localModel = e.target.value))}
+          >
+            {models.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            value={p.defaults.localModel ?? ''}
+            placeholder="no server found — model id"
+            onChange={(e) =>
+              store.mutate((proj) => void (proj.defaults.localModel = e.target.value.trim()))
+            }
+          />
+        )}
+      </div>
+    </>
   )
 }

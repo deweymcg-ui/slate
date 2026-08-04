@@ -113,7 +113,7 @@ export interface RunOpts {
 }
 
 export async function runBrain(p: Project, opts: RunOpts): Promise<BrainResult> {
-  const req: BrainRequest & { backend: 'claude' | 'codex' } = {
+  const req: BrainRequest & { backend: Project['defaults']['brain'] } = {
     id: uid('req'),
     task: opts.task,
     system: opts.system ?? CINEMA_SYSTEM,
@@ -121,7 +121,9 @@ export async function runBrain(p: Project, opts: RunOpts): Promise<BrainResult> 
     tier: opts.tier ?? 'top',
     expectJson: opts.expectJson,
     images: opts.images,
-    backend: p.defaults.brain
+    backend: p.defaults.brain,
+    localEndpoint: p.defaults.localEndpoint,
+    localModel: p.defaults.localModel
   }
   return (await window.slate.brainRun(req)) as BrainResult
 }

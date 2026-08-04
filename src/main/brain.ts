@@ -1,11 +1,13 @@
-// Brain — runs the user's own local agent CLIs (Claude Code, Codex) in print mode.
-// No API keys are stored or used; billing rides on the user's existing subscriptions.
+// Brain — runs the user's own local agent CLIs (Claude Code, Codex) in print mode,
+// or any OpenAI-compatible local model server (Ollama, LM Studio, vLLM, llama.cpp…).
+// No API keys are stored or used; billing rides on the user's existing subscriptions,
+// and the local backend never leaves the machine.
 
 import { execFile, spawn, ChildProcess } from 'child_process'
 import { existsSync, readFileSync, rmSync } from 'fs'
-import { join } from 'path'
+import { join, extname } from 'path'
 import { homedir, tmpdir } from 'os'
-import type { BrainRequest, BrainResult, BrainStatus, BrainTier } from '../shared/types'
+import type { BrainBackend, BrainRequest, BrainResult, BrainStatus, BrainTier, LocalModelInfo } from '../shared/types'
 
 // Electron apps launched from Finder/Dock inherit a minimal PATH that misses
 // Homebrew and user bins — resolve the CLIs explicitly and augment PATH.
@@ -43,6 +45,172 @@ const CLAUDE_TIER_MODEL: Record<BrainTier, string | null> = {
 }
 
 const running = new Map<string, ChildProcess>()
+const runningLocal = new Map<string, AbortController>()
+
+// ---- Local model backend (OpenAI-compatible localhost server) ----
+// One adapter covers every mainstream local runtime — they all expose the same
+// /v1/chat/completions protocol on a localhost port.
+const LOCAL_CANDIDATES = [
+  'http://localhost:11434/v1', // Ollama
+  'http://localhost:1234/v1', // LM Studio
+  'http://localhost:8000/v1', // vLLM
+  'http://localhost:8080/v1' // llama.cpp server / KoboldCpp
+]
+
+function normalizeEndpoint(url: string): string {
+  let u = url.trim().replace(/\/+$/, '')
+  if (!/^https?:\/\//.test(u)) u = `http://${u}`
+  if (!/\/v1$/.test(u)) u = `${u}/v1`
+  return u
+}
+
+async function probeLocal(endpoint: string): Promise<LocalModelInfo[] | null> {
+  try {
+    const ctrl = new AbortController()
+    const t = setTimeout(() => ctrl.abort(), 1500)
+    const res = await fetch(`${endpoint}/models`, {
+      headers: { Authorization: 'Bearer slate' },
+      signal: ctrl.signal
+    })
+    clearTimeout(t)
+    if (!res.ok) return null
+    const body = (await res.json()) as { data?: Array<{ id?: string }> }
+    const models = (body.data ?? []).filter((m) => m.id).map((m) => ({ id: String(m.id) }))
+    return models
+  } catch {
+    return null
+  }
+}
+
+/** Find a live local server: the user's configured endpoint first, then common ports. */
+export async function detectLocal(
+  preferred?: string
+): Promise<{ endpoint: string | null; models: LocalModelInfo[] }> {
+  const candidates = preferred
+    ? [normalizeEndpoint(preferred)]
+    : LOCAL_CANDIDATES
+  for (const ep of candidates) {
+    const models = await probeLocal(ep)
+    if (models !== null) return { endpoint: ep, models }
+  }
+  return { endpoint: null, models: [] }
+}
+
+const IMAGE_MIME: Record<string, string> = {
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.gif': 'image/gif'
+}
+
+type ChatContent = string | Array<{ type: string; text?: string; image_url?: { url: string } }>
+
+function localMessages(req: BrainRequest): Array<{ role: string; content: ChatContent }> {
+  let user: ChatContent = req.prompt
+  if (req.images && req.images.length > 0) {
+    const parts: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
+      { type: 'text', text: req.prompt }
+    ]
+    for (const img of req.images) {
+      const mime = IMAGE_MIME[extname(img).toLowerCase()]
+      if (!mime || !existsSync(img)) continue
+      const b64 = readFileSync(img).toString('base64')
+      parts.push({ type: 'image_url', image_url: { url: `data:${mime};base64,${b64}` } })
+    }
+    user = parts
+  }
+  return [
+    { role: 'system', content: req.system },
+    { role: 'user', content: user }
+  ]
+}
+
+async function runLocalOnce(
+  req: BrainRequest,
+  endpoint: string,
+  model: string,
+  extraNudge?: string
+): Promise<string> {
+  const messages = localMessages(req)
+  if (extraNudge) messages.push({ role: 'user', content: extraNudge })
+  const ctrl = new AbortController()
+  runningLocal.set(req.id, ctrl)
+  try {
+    const res = await fetch(`${endpoint}/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer slate' },
+      body: JSON.stringify({ model, messages, stream: false }),
+      signal: ctrl.signal
+    })
+    if (!res.ok) {
+      const detail = (await res.text().catch(() => '')).slice(0, 300)
+      throw new Error(`Local model server responded ${res.status} at ${endpoint}. ${detail}`)
+    }
+    const body = (await res.json()) as {
+      choices?: Array<{ message?: { content?: string } }>
+      error?: { message?: string }
+    }
+    if (body.error?.message) throw new Error(body.error.message)
+    const text = body.choices?.[0]?.message?.content
+    if (typeof text !== 'string' || !text.trim()) {
+      throw new Error('Local model returned an empty response.')
+    }
+    return text.trim()
+  } finally {
+    runningLocal.delete(req.id)
+  }
+}
+
+async function runLocal(req: BrainRequest, started: number): Promise<BrainResult> {
+  const { endpoint, models } = await detectLocal(req.localEndpoint)
+  if (!endpoint) {
+    return {
+      id: req.id,
+      ok: false,
+      text: '',
+      error:
+        'No local model server found. Start Ollama, LM Studio, vLLM, or llama.cpp (or set a custom endpoint in Project Settings → Brain), then retry.',
+      elapsedMs: Date.now() - started
+    }
+  }
+  const model = req.localModel?.trim() || models[0]?.id
+  if (!model) {
+    return {
+      id: req.id,
+      ok: false,
+      text: '',
+      error: `Local server at ${endpoint} has no models loaded. Pull or load a model, then retry.`,
+      elapsedMs: Date.now() - started
+    }
+  }
+  try {
+    let text = await runLocalOnce(req, endpoint, model)
+    let json: unknown
+    if (req.expectJson) {
+      try {
+        json = extractJson(text)
+      } catch {
+        text = await runLocalOnce(
+          req,
+          endpoint,
+          model,
+          'IMPORTANT: Respond with ONLY the requested JSON. No prose, no code fences.'
+        )
+        json = extractJson(text)
+      }
+    }
+    return { id: req.id, ok: true, text, json, elapsedMs: Date.now() - started }
+  } catch (e) {
+    return {
+      id: req.id,
+      ok: false,
+      text: '',
+      error: e instanceof Error ? e.message : String(e),
+      elapsedMs: Date.now() - started
+    }
+  }
+}
 
 function which(cmd: string, args: string[]): Promise<string | null> {
   return new Promise((resolve) => {
@@ -53,14 +221,22 @@ function which(cmd: string, args: string[]): Promise<string | null> {
   })
 }
 
-export async function brainStatus(): Promise<BrainStatus> {
-  const [claudeV, codexV] = await Promise.all([
+export async function brainStatus(localEndpoint?: string): Promise<BrainStatus> {
+  const [claudeV, codexV, local] = await Promise.all([
     which('claude', ['--version']),
-    which('codex', ['--version'])
+    which('codex', ['--version']),
+    detectLocal(localEndpoint)
   ])
   return {
     claude: { available: claudeV !== null, version: claudeV },
-    codex: { available: codexV !== null, version: codexV }
+    codex: { available: codexV !== null, version: codexV },
+    local: {
+      available: local.endpoint !== null,
+      version: local.endpoint
+        ? `${local.models.length} model(s) @ ${local.endpoint.replace(/^https?:\/\//, '')}`
+        : null,
+      endpoint: local.endpoint
+    }
   }
 }
 
@@ -162,10 +338,7 @@ function parseClaudeOutput(raw: string): string {
   return raw.trim()
 }
 
-export async function brainRun(
-  req: BrainRequest,
-  backend: 'claude' | 'codex'
-): Promise<BrainResult> {
+export async function brainRun(req: BrainRequest, backend: BrainBackend): Promise<BrainResult> {
   const started = Date.now()
 
   // Demo mode (SLATE_BRAIN_MOCK=<dir>): serve canned responses keyed by task
@@ -187,6 +360,8 @@ export async function brainRun(
       }
     }
   }
+  if (backend === 'local') return runLocal(req, started)
+
   const lastMessageFile = join(tmpdir(), `slate-codex-${req.id}.txt`)
   const call = backend === 'claude' ? buildClaudeCall(req) : buildCodexCall(req, lastMessageFile)
 
@@ -262,5 +437,10 @@ export function brainCancel(id: string): void {
   if (child) {
     child.kill('SIGTERM')
     running.delete(id)
+  }
+  const ctrl = runningLocal.get(id)
+  if (ctrl) {
+    ctrl.abort()
+    runningLocal.delete(id)
   }
 }

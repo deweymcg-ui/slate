@@ -20,7 +20,10 @@ export default function App(): React.JSX.Element {
     if (!project || testState === 'busy') return
     setTestState('busy')
     setTestMsg(null)
-    const res = await window.slate.brainTest(project.defaults.brain)
+    const res = await window.slate.brainTest(project.defaults.brain, {
+      endpoint: project.defaults.localEndpoint,
+      model: project.defaults.localModel
+    })
     if (res.ok && /ready/i.test(res.text)) {
       setTestState('ok')
       setTestMsg(`Brain online — replied in ${(res.elapsedMs / 1000).toFixed(1)}s`)
@@ -47,7 +50,7 @@ export default function App(): React.JSX.Element {
     }
   }, [refreshMetas, refreshBrain])
 
-  const brainReady = brain?.claude.available || brain?.codex.available
+  const brainReady = brain?.claude.available || brain?.codex.available || brain?.local?.available
 
   return (
     <div className="shell">
@@ -73,7 +76,7 @@ export default function App(): React.JSX.Element {
                   : testState === 'ok'
                     ? '✓ Brain online'
                     : brainReady
-                      ? `Brain: ${project.defaults.brain === 'claude' ? 'Claude Code' : 'Codex'} — test`
+                      ? `Brain: ${project.defaults.brain === 'claude' ? 'Claude Code' : project.defaults.brain === 'codex' ? 'Codex' : 'Local model'} — test`
                       : 'Brain offline'}
               </button>
               <button

@@ -44,8 +44,10 @@ const SECTIONS: Section[] = [
           </li>
         </ol>
         <p className="help-tip">
-          💡 The brain runs on your own Claude Code or Codex sign-in. No API keys, ever. Switch
-          brains per project in the Project Bible.
+          💡 The brain runs on your own Claude Code or Codex sign-in — or fully offline on a local
+          model (Ollama, LM Studio, vLLM, llama.cpp…). No API keys, ever. Switch brains per project
+          in the Project Bible; pick &quot;Local model&quot; and Slate auto-detects your server and
+          lists its models. For reference breakdowns, load a vision-capable local model.
         </p>
       </>
     )

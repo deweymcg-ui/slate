@@ -34,7 +34,7 @@ You write (or direct) structured, sectioned shot prompts — **Subject · Compos
 - 📦 **Deliverables** — per-model compile with preflight warnings (duration caps, aspect ratios, fps), smart character-budget compression that keeps locked lines verbatim, negative prompts where supported, timecode beats where honored. Copy one prompt, or export a scene as a Markdown shot list / CSV.
 - 🗒️ **Takes Log & version history** — circle the take that worked; roll any prompt back.
 - 🔌 **MCP built in** — agents and other tools can read and write your projects while Slate runs.
-- 🔑 **No API keys, ever** — the brain is your own local [Claude Code](https://claude.com/claude-code) or Codex sign-in.
+- 🔑 **No API keys, ever** — the brain is your own [Claude Code](https://claude.com/claude-code) or Codex sign-in, or any **local model** via Ollama, LM Studio, vLLM, llama.cpp… fully offline.
 
 ## Screenshots
 
@@ -65,14 +65,15 @@ node scripts/package-macos.mjs --install   # builds and installs /Applications/S
 
 Or run it straight from source with `npm run dev`.
 
-### The brain — your subscription, no API keys
+### The brain — your subscription or a local model, no API keys
 
-Slate contains no API keys and makes no cloud calls of its own. It drives the AI CLIs you already have:
+Slate contains no API keys and makes no cloud calls of its own. Pick any of three brains:
 
 - **Claude Code** (recommended) — install, then `claude auth login`
 - **Codex** — if the ChatGPT desktop app is installed and signed in, Slate uses its bundled codex automatically; otherwise install the codex CLI and `codex login`
+- **Local model (offline)** — any OpenAI-compatible local server: **Ollama, LM Studio, vLLM, llama.cpp, KoboldCpp, Jan**, and friends. Slate auto-detects the common ports (`11434`, `1234`, `8000`, `8080`), lists whatever models you have loaded, and never sends a byte off your machine. A custom endpoint field covers anything else. For the reference image/video breakdown features, load a vision-capable model (e.g. `llama3.2-vision`, `qwen2.5-vl`).
 
-Pick the brain per project in the Project Bible. Click the **brain pill** in the titlebar any time to run a live connectivity test — if something's wrong it tells you the exact fix. If neither CLI is present, everything except the AI features still works.
+Pick the brain per project in the Project Bible. Click the **brain pill** in the titlebar any time to run a live connectivity test — if something's wrong it tells you the exact fix. If no brain is present, everything except the agent features still works.
 
 ## The workflow
 
@@ -121,7 +122,7 @@ No pressure at all. Using the apps, sharing them, starring the repositories, and
 
 ## License & credits
 
-**Apache License 2.0** — see [LICENSE](LICENSE). Free to use, modify, fork, and build on, commercially or otherwise.
+**Apache License 2.0** — see [LICENSE](LICENSE). Open source: use, modify, fork, and build on it, commercially or otherwise.
 
 **Attribution required:** per the [NOTICE](NOTICE) file (Apache 2.0 §4(d)), any use, fork, or redistribution must retain the NOTICE file and credit **Sam Wasserman ([wassermanproductions.com](https://wassermanproductions.com))** in its documentation and about/credits surface.
 

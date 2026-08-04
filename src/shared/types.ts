@@ -173,7 +173,11 @@ export interface ProjectDefaults {
   fps: number
   durationSec: number
   targetModel: string
-  brain: 'claude' | 'codex'
+  brain: BrainBackend
+  /** Optional override for the local server base URL (e.g. http://localhost:1234/v1). Empty = auto-detect. */
+  localEndpoint?: string
+  /** Model id to use on the local server. Empty = first available. */
+  localModel?: string
 }
 
 export interface AudioFingerprint {
@@ -265,6 +269,10 @@ export interface ProjectMeta {
 
 export type BrainTier = 'fast' | 'standard' | 'top'
 
+/** Which engine powers agent tasks. 'local' talks to any OpenAI-compatible
+ *  localhost server (Ollama, LM Studio, vLLM, llama.cpp, KoboldCpp, Jan…). */
+export type BrainBackend = 'claude' | 'codex' | 'local'
+
 export interface BrainRequest {
   id: string
   task: string
@@ -273,6 +281,9 @@ export interface BrainRequest {
   images?: string[]
   tier: BrainTier
   expectJson?: boolean
+  /** Local backend only: server base URL override and model id. */
+  localEndpoint?: string
+  localModel?: string
 }
 
 export interface BrainResult {
@@ -287,6 +298,11 @@ export interface BrainResult {
 export interface BrainStatus {
   claude: { available: boolean; version: string | null }
   codex: { available: boolean; version: string | null }
+  local: { available: boolean; version: string | null; endpoint: string | null }
+}
+
+export interface LocalModelInfo {
+  id: string
 }
 
 // ---- IPC surface ----
@@ -300,7 +316,8 @@ export interface SlateApi {
   brainStatus(): Promise<BrainStatus>
   brainRun(req: BrainRequest): Promise<BrainResult>
   brainCancel(id: string): Promise<void>
-  brainTest(backend: 'claude' | 'codex'): Promise<BrainResult>
+  brainTest(backend: BrainBackend, local?: { endpoint?: string; model?: string }): Promise<BrainResult>
+  localModels(endpoint?: string): Promise<{ endpoint: string | null; models: LocalModelInfo[] }>
   pickMedia(): Promise<string[]>
   pickAudio(): Promise<string[]>
   ingestMedia(projectId: string, path: string): Promise<{ kind: 'image' | 'video'; frames: string[] }>

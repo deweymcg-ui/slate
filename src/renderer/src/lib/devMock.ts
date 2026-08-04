@@ -36,7 +36,11 @@ export function installDevMock(): void {
       projects.delete(id)
     },
     async brainStatus() {
-      return { claude: { available: false, version: null }, codex: { available: false, version: null } }
+      return {
+        claude: { available: false, version: null },
+        codex: { available: false, version: null },
+        local: { available: false, version: null, endpoint: null }
+      }
     },
     async brainRun(req) {
       return {
@@ -48,6 +52,9 @@ export function installDevMock(): void {
       }
     },
     async brainCancel() {},
+    async localModels() {
+      return { endpoint: null, models: [] }
+    },
     async brainTest(): Promise<import('../../../shared/types').BrainResult> {
       return {
         id: 'test',

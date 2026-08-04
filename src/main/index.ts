@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, dialog, shell, clipboard, Menu } from 'electron'
 import { join } from 'path'
-import { brainRun, brainCancel, brainStatus } from './brain'
+import { brainRun, brainCancel, brainStatus, detectLocal } from './brain'
 import {
   listProjects,
   createProject,
@@ -12,7 +12,7 @@ import {
 import { startControlServer } from './control'
 import { extractFrames, mediaKind } from './ingest'
 import { analyzeAudio } from './audio'
-import type { BrainRequest, Project } from '../shared/types'
+import type { BrainBackend, BrainRequest, Project } from '../shared/types'
 
 let win: BrowserWindow | null = null
 
@@ -206,20 +206,23 @@ ipcMain.handle('projects:reveal', (_e, id: string) => {
   shell.showItemInFolder(join(projectsRoot(), id, 'project.json'))
 })
 
-ipcMain.handle('brain:status', () => brainStatus())
-ipcMain.handle('brain:test', async (_e, backend: 'claude' | 'codex') => {
+ipcMain.handle('brain:status', (_e, localEndpoint?: string) => brainStatus(localEndpoint))
+ipcMain.handle('brain:localModels', (_e, endpoint?: string) => detectLocal(endpoint))
+ipcMain.handle('brain:test', async (_e, backend: BrainBackend, local?: { endpoint?: string; model?: string }) => {
   return brainRun(
     {
       id: `test-${Date.now()}`,
       task: 'self-test',
       system: 'You are a connectivity check. Reply with exactly one word.',
       prompt: 'Reply with exactly: READY',
-      tier: 'fast'
+      tier: 'fast',
+      localEndpoint: local?.endpoint,
+      localModel: local?.model
     },
     backend
   )
 })
-ipcMain.handle('brain:run', (_e, req: BrainRequest & { backend: 'claude' | 'codex' }) =>
+ipcMain.handle('brain:run', (_e, req: BrainRequest & { backend: BrainBackend }) =>
   brainRun(req, req.backend)
 )
 ipcMain.handle('brain:cancel', (_e, id: string) => brainCancel(id))

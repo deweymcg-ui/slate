@@ -8,7 +8,8 @@ import { join } from 'path'
 import { homedir } from 'os'
 import { randomBytes } from 'crypto'
 import { listProjects, openProject, saveProject, createProject } from './projects'
-import type { Project, Scene, Shot } from '../shared/types'
+import { brainStatus, detectLocal } from './brain'
+import type { BrainBackend, Project, Scene, Shot } from '../shared/types'
 
 type Notify = () => void
 
@@ -112,6 +113,26 @@ const tools: Record<string, (args: Record<string, unknown>, notify: Notify) => P
     const p = await openProject(String(args.projectId))
     if (!p) throw new Error('Project not found')
     return p.lookbook
+  },
+  async brain_status() {
+    return await brainStatus()
+  },
+  async list_local_models(args) {
+    return await detectLocal(args.endpoint ? String(args.endpoint) : undefined)
+  },
+  async set_brain(args, notify) {
+    const p = await openProject(String(args.projectId))
+    if (!p) throw new Error('Project not found')
+    const brain = String(args.brain) as BrainBackend
+    if (!['claude', 'codex', 'local'].includes(brain)) {
+      throw new Error("brain must be one of: claude, codex, local")
+    }
+    p.defaults.brain = brain
+    if (args.endpoint !== undefined) p.defaults.localEndpoint = String(args.endpoint)
+    if (args.model !== undefined) p.defaults.localModel = String(args.model)
+    await saveProject(p)
+    notify()
+    return { ok: true, brain: p.defaults.brain }
   }
 }
 
@@ -126,7 +147,10 @@ export function toolCatalog(): Array<{ name: string; description: string }> {
     { name: 'add_scene', description: 'Add a scene (args: projectId, name, synopsis)' },
     { name: 'list_characters', description: 'List character sheets (args: projectId)' },
     { name: 'list_locations', description: 'List location sheets (args: projectId)' },
-    { name: 'list_lookbook', description: 'List style profiles (args: projectId)' }
+    { name: 'list_lookbook', description: 'List style profiles (args: projectId)' },
+    { name: 'brain_status', description: 'Report which brains are available: Claude Code, Codex, and any local model server' },
+    { name: 'list_local_models', description: 'List models on the local OpenAI-compatible server (args: endpoint?)' },
+    { name: 'set_brain', description: 'Set a project brain: claude | codex | local (args: projectId, brain, endpoint?, model?)' }
   ]
 }
 
