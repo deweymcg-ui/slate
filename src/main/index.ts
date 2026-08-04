@@ -92,7 +92,54 @@ function buildMenu(): void {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 }
 
+// Headless capture mode (SLATE_SNAP_SCRIPT + SLATE_SNAP_OUT): drive the UI
+// from a step script and save PNGs from a hidden window. Used by scripts/snap.
+async function runSnap(): Promise<void> {
+  const { readFileSync, writeFileSync, mkdirSync } = await import('fs')
+  const scriptPath = process.env.SLATE_SNAP_SCRIPT!
+  const outDir = process.env.SLATE_SNAP_OUT || '.'
+  mkdirSync(outDir, { recursive: true })
+  const steps = JSON.parse(readFileSync(scriptPath, 'utf8')) as Array<{
+    js?: string
+    wait?: number
+    shot?: string
+  }>
+  const w = new BrowserWindow({
+    width: 1560,
+    height: 975,
+    show: false,
+    backgroundColor: '#0a0b0d',
+    webPreferences: {
+      preload: join(__dirname, '../preload/index.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+      backgroundThrottling: false
+    }
+  })
+  if (process.env.ELECTRON_RENDERER_URL) await w.loadURL(process.env.ELECTRON_RENDERER_URL)
+  else await w.loadFile(join(__dirname, '../renderer/index.html'))
+  await new Promise((r) => setTimeout(r, 900))
+  for (const step of steps) {
+    try {
+      if (step.js) await w.webContents.executeJavaScript(step.js, true)
+      if (step.wait) await new Promise((r) => setTimeout(r, step.wait))
+      if (step.shot) {
+        const img = await w.webContents.capturePage()
+        writeFileSync(join(outDir, `${step.shot}.png`), img.toPNG())
+        console.log('snap:', step.shot, img.getSize().width + 'x' + img.getSize().height)
+      }
+    } catch (e) {
+      console.error('snap step failed:', JSON.stringify(step).slice(0, 80), e)
+    }
+  }
+  app.exit(0)
+}
+
 app.whenReady().then(async () => {
+  if (process.env.SLATE_SNAP_SCRIPT) {
+    await runSnap()
+    return
+  }
   buildMenu()
   createWindow()
   await startControlServer(notifyProjectsChanged)

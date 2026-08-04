@@ -1,67 +1,120 @@
+<div align="center">
+
+<img src="docs/images/logo.png" alt="Slate logo" width="360" />
+
 <p align="center">
-  <img src="resources/brand.webp" width="520" alt="Slate — prompt studio for AI filmmaking. Plan · Direct · Compile" />
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="License: Apache 2.0"></a>
+  <a href="../../releases"><img src="https://img.shields.io/github/v/release/wassermanproductions/slate?include_prereleases&label=download" alt="Latest release"></a>
+  <img src="https://img.shields.io/badge/platform-macOS-2f7bf6" alt="Platforms">
+  <a href="https://ko-fi.com/samwasserman"><img src="https://img.shields.io/badge/Ko--fi-support%20Sam%20Wasserman-ff5e5b?logo=kofi&logoColor=white" alt="Support Sam Wasserman on Ko-fi"></a>
 </p>
 
-<p align="center"><b>The prompt studio for AI filmmaking.</b><br />
-Plan shots, direct coverage, spot your score, cast your voices, keep continuity — and compile production-ready prompts for any image, video, music, or voice generator.</p>
+**The prompt studio for AI filmmaking.** Plan shots, direct coverage, spot your score, cast your voices, keep continuity across an entire film — and compile production-ready prompts for the exact generator you're using.
+
+![Slate — the prompt editor with cinematic syntax highlighting](docs/images/1-editor.png)
+
+</div>
 
 ---
 
-Slate is a desktop app for filmmakers who generate with AI. It doesn't render images or video — it makes the prompts you take *into* your generators dramatically better, faster, and consistent across an entire film.
+Slate doesn't generate images or video. It makes the **prompts** you paste into your generators dramatically better, faster, and consistent across a whole film — the missing pre-production layer between *"I can see the shot"* and the generate button.
 
-You write (or direct) structured, sectioned shot prompts — **Subject / Composition / Lighting / Camera / Style / Mood** — with live cinematic syntax highlighting. A local AI brain helps you structure, tighten, enrich, riff, and iterate, always in the context of your project's characters, locations, props, and look.
+You write (or direct) structured, sectioned shot prompts — **Subject · Composition · Lighting · Camera · Style · Mood**, the categories a crew thinks in — with live cinematic syntax highlighting. A local AI brain helps you structure, tighten, enrich, riff, and iterate, always in the context of your film's characters, locations, props, and look. Then Slate compiles each shot, music cue, or voice for a specific target: **Seedance 2.0, Kling, Veo, Sora, Hailuo, LTX, Flux, Midjourney, GPT Image, Krea, ComfyUI, Suno, Eleven Music, Lyria, Stable Audio, ElevenLabs Voice Design, Hume, MiniMax** — each in its own dialect, against its real limits.
 
-## Highlights
+- 🎬 **Projects → scenes → shots.** Your film's bible (logline, world, cast, locations, props, style) travels with every prompt. The brain already knows your protagonist's scar and your city's neon.
+- 🎛️ **Shot specs as real controls** — length (any seconds), fps, aspect ratio, shot size, angle, lens, movement, optional character budget. Structured fields, compiled correctly per model.
+- 🖍️ **A prompt editor that reads like a lit set** — camera terms in cyan, lighting in gold, color in magenta, motion in green, mood in violet. **Picture-Lock** any line and no transform will ever touch it; **mute** a line to keep it without exporting it; highlight a phrase and **reshoot just that span**.
+- 🎥 **Coverage Plans** — one scene description becomes a full set of shots: Full, Dialogue, Motion, Extreme Action, Establishing, Surveillance, Entrance, Parallel Action, Dance, Angle, Orbit, Story Beats — or call your own coverage in plain English.
+- ⛓️ **Sequence Chunks** — a 3-minute fight becomes ~20-second generation prompts with explicit continuity handoffs (each chunk opens exactly where the last ended), optionally beat-directed with timecodes inside each chunk.
+- 🗣️ **Director's Notes** — talk to the shot: *"make it rain, keep the neon."* The prompt updates; the old version goes to history.
+- ✦ **First AD (optional)** — a conversational operator. Describe what you're after, hone it together, and it runs the set: scenes, shots, specs, prompts, cast, locations, music cues, voices — with a receipt for every action. Or never open it and drive everything by hand.
+- 🧑‍🤝‍🧑 **Casting, Art Department, Locations, Lookbook** — structured sheets with natural-language auto-fill; one-click reference-sheet prompts pull consistent identity sheets from your image generator. Study any cinematographer, director, film, or series into a reusable style profile.
+- 🎼 **A Sound Department** — design music cues like a composer spotting a scene (the brain writes tagged lyrics on request) and cast voices with audition text. Drop in **any audio file** and Slate measures it locally — tempo, pitch register, dynamics, brightness, energy arc — then reverse-engineers a matching cue or voice sheet.
+- 🖼️ **References** — drop in stills or clips; clips are key-framed locally (ffmpeg) and broken down into element sheets — lensing, lighting, palette, movement — you reuse as one-click ingredients.
+- 📦 **Deliverables** — per-model compile with preflight warnings (duration caps, aspect ratios, fps), smart character-budget compression that keeps locked lines verbatim, negative prompts where supported, timecode beats where honored. Copy one prompt, or export a scene as a Markdown shot list / CSV.
+- 🗒️ **Takes Log & version history** — circle the take that worked; roll any prompt back.
+- 🔌 **MCP built in** — agents and other tools can read and write your projects while Slate runs.
+- 🔑 **No API keys, ever** — the brain is your own local [Claude Code](https://claude.com/claude-code) or Codex sign-in.
 
-- **Projects → scenes → shots.** Your film's bible (logline, world, cast, locations, props, style) travels with every prompt. Open a project and the brain already knows your protagonist's scar and your city's neon.
-- **Shot specs as controls.** Length (any seconds), fps, aspect ratio, shot size, angle, lens, movement — structured fields, not prose, compiled correctly for each target model.
-- **Coverage Plans.** One scene description → a full set of varied shots: Full, Dialogue, Motion, Extreme Action, Establishing, Surveillance, Entrance, Parallel Action, Dance, Angle, Orbit, Story Beats — or call your own coverage in plain English.
-- **Sequence Chunks.** A 3-minute fight becomes ~20-second generation chunks with explicit continuity handoffs — each chunk's opening state matches the previous chunk's end state, with optional timecoded beats inside each chunk (`0–3s: … 4–8s: …`).
-- **Director's Notes.** Talk to the shot: *"make it rain, keep the neon."* The brain updates the prompt; the old version goes to history.
-- **Pickups.** Highlight one phrase, direct just that span, everything else stays put.
-- **Picture Lock.** Lock any line — no transform, roll, or rewrite will ever touch it. Mute lines to keep them without exporting them.
-- **Alt Takes, Variants, Punch-Ups, Tone Dial, Second Unit.** Roll chosen elements under rules, get differently-weighted versions to A/B, bold what-if riffs, systematic mood dialing, and scene extensions.
-- **Casting, Art Department, Locations.** Structured sheets for characters, props/wardrobe/vehicles, and places — with natural-language auto-fill and one-click reference-sheet prompts for your image generator.
-- **Lookbook.** Study a cinematographer, director, film, or series into a reusable style profile — concrete visual language, applied whole or piecemeal.
-- **Sound Department.** Spot your score and cast your voices. Music cues (genre, mood, tempo, instrumentation, structure, optional lyrics — the brain can write them) compile into the right dialect for Suno, ElevenLabs Music, Lyria, and more. Voice sheets (timbre, accent, pacing, texture, emotional range — linkable to your cast) compile into voice-design prompts plus audition text for ElevenLabs and other voice tools.
-- **First AD (optional).** A conversational operator: talk through what you're after, hone it together, and when the intent is clear it runs the set — creating scenes, shots, specs, prompts, characters, locations, music cues, and voices for you, with receipts for every move and full version history. Or never open it and drive everything by hand.
-- **References.** Bring in stills or clips; clips are broken into key frames locally (ffmpeg) and analyzed into an element sheet — lensing, lighting, palette, composition, movement, texture — you can reuse as one-click Setups. Media is linked, never copied.
-- **165+ Setups.** Film stocks, lenses, lighting rigs, composition patterns, moods — plus your own saved Setups.
-- **Deliverables.** Compile any shot for a specific model — current profiles include GPT Image 2, Midjourney, Krea, Flux, Seedance, Hailuo, LTX, Kling, Sora, Veo, and ComfyUI — with per-model dialect, duration/aspect/fps preflight warnings, optional character budget (locked lines survive compression verbatim), negative prompts where supported, and timecode beats where the model honors them. Copy, or export a whole scene as a Markdown shot list or CSV.
-- **Continuity Check.** A script-supervisor pass across a scene's prompts: characters, wardrobe, props, light, weather, geography.
-- **Takes Log.** Circle the take that worked so the project remembers reality, not just intentions.
+## Screenshots
 
-## The brain — your subscription, no API keys
+| | |
+|---|---|
+| ![Home](docs/images/2-home.png) | ![Coverage](docs/images/3-coverage.png) |
+| ![Sound Department](docs/images/4-sound.png) | ![First AD](docs/images/5-first-ad.png) |
+
+## Install
+
+Requires **Node 20+**, and **ffmpeg** on your PATH for clip/audio reference analysis (`brew install ffmpeg`).
+
+```bash
+git clone https://github.com/wassermanproductions/slate.git
+cd slate
+npm ci
+npm run build
+node scripts/package-macos.mjs --install   # builds and installs /Applications/Slate.app
+```
+
+Or run it straight from source with `npm run dev`.
+
+### The brain — your subscription, no API keys
 
 Slate contains no API keys and makes no cloud calls of its own. It drives the AI CLIs you already have:
 
-- **Claude Code** (recommended) — install and `claude login`
-- **Codex CLI** — install and sign in
+- **Claude Code** (recommended) — install, then `claude auth login`
+- **Codex** — if the ChatGPT desktop app is installed and signed in, Slate uses its bundled codex automatically; otherwise install the codex CLI and `codex login`
 
-Pick the brain per project in the Project Bible. If neither CLI is installed, everything except the AI features still works.
+Pick the brain per project in the Project Bible. Click the **brain pill** in the titlebar any time to run a live connectivity test — if something's wrong it tells you the exact fix. If neither CLI is present, everything except the AI features still works.
 
-## Install & run
+## The workflow
 
-Requires Node 20+ and (for clip ingestion) ffmpeg on your PATH.
+1. **Create a project** and fill the **Project Bible** — logline, world & tone, defaults (aspect ratio, clip length, target model).
+2. **Cast and scout** in the Studios: characters, props/wardrobe/vehicles, locations, a Lookbook style — each with ✦ auto-fill from one line of description.
+3. **Build shots** by hand in the editor, or describe a scene and let **Coverage** lay it out, or tell the **First AD** what you want and watch the receipts roll in.
+4. **Iterate** — one-click transforms (Structure / Tighten / Enrich / Distill / Shot / Angle), Variants, Punch-Ups, Alt Takes, the Tone dial, timecoded Beats, Pickups on any highlighted span.
+5. **Keep it honest** — run a **Continuity Check** across the scene; a script-supervisor pass flags wardrobe, lighting, weather, and geography mismatches with concrete fixes.
+6. **Deliver** — pick the target model, heed the preflight warnings, compile, copy, generate. **Circle the takes** that worked so the project remembers reality.
 
-```bash
-git clone <repo-url> slate && cd slate
-npm ci
-npm run dev
-```
+Projects are plain JSON in `~/Documents/Slate/` — yours to back up, sync, or version however you like.
 
-`npm run build` + `npm start` runs the production build. Projects are saved as plain JSON under `~/Documents/Slate/` — yours to back up, sync, or version however you like.
+## Working with agents (MCP)
 
-## Working with other tools (MCP)
-
-Slate ships a Model Context Protocol server so agents and other apps can read and write your projects while Slate runs:
+Slate ships a [Model Context Protocol](https://modelcontextprotocol.io) server so agents and suite apps can read and write your projects while Slate runs:
 
 ```bash
 claude mcp add slate -- node /absolute/path/to/slate/mcp/slate-mcp.mjs
 ```
 
-Tools include `list_projects`, `list_shots`, `get_shot_prompt`, `set_shot_prompt` (with automatic versioning), `add_scene`, `list_characters`, `list_locations`, and `list_lookbook`. The control channel is localhost-only with a per-session bearer token.
+Tools: `list_projects`, `get_project`, `create_project`, `list_shots`, `get_shot_prompt`, `set_shot_prompt` (with automatic versioning), `add_scene`, `list_characters`, `list_locations`, `list_lookbook`. The control channel is localhost-only with a per-session bearer token; the bridge is a single zero-dependency file.
 
-## License
+It pairs naturally with the rest of [Wasserman's Filmmaker Suite](https://github.com/wassermanproductions/wassermans-filmmaker-suite) — break down the script in ScriptBreak, block the scene in Blockout, and craft every generator prompt in Slate.
 
-Apache-2.0 © Sam Wasserman
+## Development
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Run from source with hot reload |
+| `npm run build` | Production build (electron-vite) |
+| `npm test` | Unit tests (export engine, action engine, audio DSP) |
+| `npm run typecheck` | Strict TypeScript across main, preload, renderer |
+| `node scripts/package-macos.mjs --install` | Build and install `/Applications/Slate.app` |
+| `node scripts/snap.mjs` | Regenerate README screenshots headlessly |
+
+Stack: Electron + TypeScript + React, CodeMirror 6 editor, zustand state, vitest. The audio reference analysis is local DSP (tempo, pitch, dynamics, structure) — measured on your machine, nothing uploaded.
+
+## Support
+
+A few people asked if they could send tips to support my work developing open source tools. So I set up an optional way in case anyone wants to.
+
+No pressure at all. Using the apps, sharing them, starring the repositories, and contributing code all help too. Thank you.
+
+- [GitHub Sponsors](https://github.com/sponsors/wassermanproductions)
+- [Ko-fi](https://ko-fi.com/samwasserman)
+
+## License & credits
+
+**Apache License 2.0** — see [LICENSE](LICENSE). Free to use, modify, fork, and build on, commercially or otherwise.
+
+**Attribution required:** per the [NOTICE](NOTICE) file (Apache 2.0 §4(d)), any use, fork, or redistribution must retain the NOTICE file and credit **Sam Wasserman ([wassermanproductions.com](https://wassermanproductions.com))** in its documentation and about/credits surface.
+
+Created by **Sam Wasserman** — [wassermanproductions.com](https://wassermanproductions.com) · [wasserman.ai](https://wasserman.ai).

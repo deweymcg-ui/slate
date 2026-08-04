@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use Slate in your work, please cite it and credit Sam Wasserman (wassermanproductions.com), per the project's NOTICE and Section 4(d) of the Apache License 2.0."
+title: "Slate"
+abstract: "A desktop prompt studio for AI filmmaking: plan shots scene by scene, keep characters, locations, and look consistent, direct coverage and music and voices with a local AI brain, and compile production-ready prompts for any image, video, music, or voice generator (Seedance, Kling, Veo, Midjourney, Flux, Suno, ElevenLabs, and more)."
+type: software
+authors:
+  - family-names: "Wasserman"
+    given-names: "Sam"
+    website: "https://wassermanproductions.com"
+version: "0.1.0"
+date-released: "2026-08-04"
+license: "Apache-2.0"
+url: "https://github.com/wassermanproductions/slate"
+repository-code: "https://github.com/wassermanproductions/slate"
+keywords:
+  - filmmaking
+  - ai-video
+  - prompt-engineering
+  - previsualization
+  - screenwriting
+  - generative-video
+  - mcp

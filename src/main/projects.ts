@@ -9,7 +9,8 @@ import { randomUUID } from 'crypto'
 import type { Project, ProjectMeta } from '../shared/types'
 
 export function projectsRoot(): string {
-  return join(app.getPath('documents'), 'Slate')
+  // SLATE_DATA_DIR overrides the default location (portable installs, tests).
+  return process.env.SLATE_DATA_DIR || join(app.getPath('documents'), 'Slate')
 }
 
 function projectDir(id: string): string {
