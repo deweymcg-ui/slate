@@ -167,6 +167,26 @@ export async function brainRun(
   backend: 'claude' | 'codex'
 ): Promise<BrainResult> {
   const started = Date.now()
+
+  // Demo mode (SLATE_BRAIN_MOCK=<dir>): serve canned responses keyed by task
+  // prefix after a short realistic delay. Used by the capture rig only.
+  if (process.env.SLATE_BRAIN_MOCK) {
+    const dir = process.env.SLATE_BRAIN_MOCK
+    const key = ['first-ad', 'reference-analysis', 'score-compile', 'voice-compile', 'compile', 'directors-note']
+      .find((k) => req.task.startsWith(k))
+    const file = join(dir, `${key ?? 'default'}.json`)
+    if (existsSync(file)) {
+      await new Promise((r) => setTimeout(r, 1200))
+      const canned = JSON.parse((await import('fs')).readFileSync(file, 'utf8'))
+      return {
+        id: req.id,
+        ok: true,
+        text: typeof canned === 'string' ? canned : JSON.stringify(canned),
+        json: typeof canned === 'string' ? undefined : canned,
+        elapsedMs: Date.now() - started
+      }
+    }
+  }
   const lastMessageFile = join(tmpdir(), `slate-codex-${req.id}.txt`)
   const call = backend === 'claude' ? buildClaudeCall(req) : buildCodexCall(req, lastMessageFile)
 

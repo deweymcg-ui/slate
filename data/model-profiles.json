@@ -14,7 +14,14 @@
         "maxChars": null,
         "maxDurationSec": null,
         "durations": null,
-        "aspectRatios": ["1:1", "3:2", "2:3", "16:9", "9:16", "auto"],
+        "aspectRatios": [
+          "1:1",
+          "3:2",
+          "2:3",
+          "16:9",
+          "9:16",
+          "auto"
+        ],
         "fps": null,
         "resolutions": [
           "1024x1024",
@@ -35,12 +42,64 @@
         "seeds": false
       },
       "params": [
-        { "name": "quality", "type": "enum", "values": ["low", "medium", "high", "auto"], "note": "Use medium or high for dense text or multi-font layouts." },
-        { "name": "size", "type": "enum", "values": ["1024x1024", "2048x2048", "1536x1024", "1024x1536", "2048x1152", "3840x2160", "2160x3840", "auto"], "note": "Dimensions must be multiples of 16; max edge 3840px; max aspect ratio 3:1." },
-        { "name": "output_format", "type": "enum", "values": ["png", "jpeg", "webp"], "note": "PNG is the default. Transparent backgrounds are not supported." },
-        { "name": "output_compression", "type": "number", "values": ["0-100"], "note": "JPEG and WebP only." },
-        { "name": "moderation", "type": "enum", "values": ["auto", "low"], "note": "Two-stage filter runs on both the prompt and the output regardless of setting." },
-        { "name": "n", "type": "number", "note": "Number of images per request." }
+        {
+          "name": "quality",
+          "type": "enum",
+          "values": [
+            "low",
+            "medium",
+            "high",
+            "auto"
+          ],
+          "note": "Use medium or high for dense text or multi-font layouts."
+        },
+        {
+          "name": "size",
+          "type": "enum",
+          "values": [
+            "1024x1024",
+            "2048x2048",
+            "1536x1024",
+            "1024x1536",
+            "2048x1152",
+            "3840x2160",
+            "2160x3840",
+            "auto"
+          ],
+          "note": "Dimensions must be multiples of 16; max edge 3840px; max aspect ratio 3:1."
+        },
+        {
+          "name": "output_format",
+          "type": "enum",
+          "values": [
+            "png",
+            "jpeg",
+            "webp"
+          ],
+          "note": "PNG is the default. Transparent backgrounds are not supported."
+        },
+        {
+          "name": "output_compression",
+          "type": "number",
+          "values": [
+            "0-100"
+          ],
+          "note": "JPEG and WebP only."
+        },
+        {
+          "name": "moderation",
+          "type": "enum",
+          "values": [
+            "auto",
+            "low"
+          ],
+          "note": "Two-stage filter runs on both the prompt and the output regardless of setting."
+        },
+        {
+          "name": "n",
+          "type": "number",
+          "note": "Number of images per request."
+        }
       ],
       "notes": "Model snapshot gpt-image-2-2026-04-21, released April 2026. Max prompt length is not published by OpenAI, so maxChars is null rather than guessed. There is no settable seed input (a seed appears in response metadata only) and no negative-prompt parameter, so exclusions must be written into the prompt. Reference images go through the images.edit endpoint and are locked to high input fidelity. API access requires organization verification."
     },
@@ -57,9 +116,19 @@
         "maxChars": null,
         "maxDurationSec": null,
         "durations": null,
-        "aspectRatios": ["1:1", "4:5", "2:3", "3:2", "16:9", "9:16", "21:9"],
+        "aspectRatios": [
+          "1:1",
+          "4:5",
+          "2:3",
+          "3:2",
+          "16:9",
+          "9:16",
+          "21:9"
+        ],
         "fps": null,
-        "resolutions": ["2048px long edge (--hd)"]
+        "resolutions": [
+          "2048px long edge (--hd)"
+        ]
       },
       "features": {
         "negativePrompt": true,
@@ -69,17 +138,73 @@
         "seeds": true
       },
       "params": [
-        { "name": "--ar", "type": "string", "note": "Arbitrary ratios accepted; ceiling reported as 14:1, or 4:1 in HD mode. The listed ratios are common presets, not an exhaustive allowlist." },
-        { "name": "--stylize", "type": "number", "values": ["0-1000"], "note": "Higher values let Midjourney impose its house aesthetic over literal prompt adherence." },
-        { "name": "--chaos", "type": "number", "values": ["0-100"], "note": "Spread between the four grid variations." },
-        { "name": "--weird", "type": "number", "values": ["0-3000"], "note": "Documented as not fully compatible with --seed." },
-        { "name": "--style", "type": "enum", "values": ["raw"], "note": "Suppresses the default aesthetic pass for stronger prompt adherence." },
-        { "name": "--no", "type": "string", "note": "Negative terms, comma separated." },
-        { "name": "--seed", "type": "number", "note": "Reproduction is near-identical rather than exact." },
-        { "name": "--sref", "type": "string", "note": "Style reference URL; paired with --sw style weight." },
-        { "name": "--oref", "type": "string", "note": "Omni reference URL for subject transfer; paired with --ow omni weight." },
-        { "name": "--iw", "type": "number", "note": "Image weight for supplied image prompts." },
-        { "name": "--hd", "type": "flag", "note": "2048px output; --sd is the faster standard-resolution mode." }
+        {
+          "name": "--ar",
+          "type": "string",
+          "note": "Arbitrary ratios accepted; ceiling reported as 14:1, or 4:1 in HD mode. The listed ratios are common presets, not an exhaustive allowlist."
+        },
+        {
+          "name": "--stylize",
+          "type": "number",
+          "values": [
+            "0-1000"
+          ],
+          "note": "Higher values let Midjourney impose its house aesthetic over literal prompt adherence."
+        },
+        {
+          "name": "--chaos",
+          "type": "number",
+          "values": [
+            "0-100"
+          ],
+          "note": "Spread between the four grid variations."
+        },
+        {
+          "name": "--weird",
+          "type": "number",
+          "values": [
+            "0-3000"
+          ],
+          "note": "Documented as not fully compatible with --seed."
+        },
+        {
+          "name": "--style",
+          "type": "enum",
+          "values": [
+            "raw"
+          ],
+          "note": "Suppresses the default aesthetic pass for stronger prompt adherence."
+        },
+        {
+          "name": "--no",
+          "type": "string",
+          "note": "Negative terms, comma separated."
+        },
+        {
+          "name": "--seed",
+          "type": "number",
+          "note": "Reproduction is near-identical rather than exact."
+        },
+        {
+          "name": "--sref",
+          "type": "string",
+          "note": "Style reference URL; paired with --sw style weight."
+        },
+        {
+          "name": "--oref",
+          "type": "string",
+          "note": "Omni reference URL for subject transfer; paired with --ow omni weight."
+        },
+        {
+          "name": "--iw",
+          "type": "number",
+          "note": "Image weight for supplied image prompts."
+        },
+        {
+          "name": "--hd",
+          "type": "flag",
+          "note": "2048px output; --sd is the faster standard-resolution mode."
+        }
       ],
       "notes": "V8.2 became the default on July 24, 2026, replacing V8.1. V7 remains selectable and is the safer choice when you need full feature coverage, since some V8 reference features route through V7 internally. Midjourney's docs site blocks automated fetching, so exact numeric ranges for --stylize, --chaos, --weird, --sw, --ow and --seed were cross-referenced from secondary guides rather than the primary docs and should be treated as approximate. Max prompt length, current --quality values, standard-mode base resolution, and whether Draft Mode is available on V8.2 could not be verified and are omitted or null."
     },
@@ -96,9 +221,22 @@
         "maxChars": null,
         "maxDurationSec": null,
         "durations": null,
-        "aspectRatios": ["1:1", "4:3", "3:2", "16:9", "2.35:1", "4:5", "2:3", "9:16"],
+        "aspectRatios": [
+          "1:1",
+          "4:3",
+          "3:2",
+          "16:9",
+          "2.35:1",
+          "4:5",
+          "2:3",
+          "9:16"
+        ],
         "fps": null,
-        "resolutions": ["1K", "1.5K", "4K (via Enhancer upscale)"]
+        "resolutions": [
+          "1K",
+          "1.5K",
+          "4K (via Enhancer upscale)"
+        ]
       },
       "features": {
         "negativePrompt": false,
@@ -108,10 +246,44 @@
         "seeds": false
       },
       "params": [
-        { "name": "aspect_ratio", "type": "enum", "values": ["1:1", "4:3", "3:2", "16:9", "2.35:1", "4:5", "2:3", "9:16"], "note": "Ratio list confirmed for Krea 1; Krea 2's full list was not published." },
-        { "name": "resolution", "type": "enum", "values": ["1K", "1.5K"], "note": "Higher output is reached through the separate Enhancer upscale, not a generation parameter." },
-        { "name": "reference_images", "type": "list", "note": "Up to 3 references for style guidance; Krea 2 adds per-reference influence weights and multi-reference blending." },
-        { "name": "checkpoint", "type": "enum", "values": ["Krea 2 Raw", "Krea 2 Turbo"], "note": "Turbo is the distilled speed variant; Raw is the base model." }
+        {
+          "name": "aspect_ratio",
+          "type": "enum",
+          "values": [
+            "1:1",
+            "4:3",
+            "3:2",
+            "16:9",
+            "2.35:1",
+            "4:5",
+            "2:3",
+            "9:16"
+          ],
+          "note": "Ratio list confirmed for Krea 1; Krea 2's full list was not published."
+        },
+        {
+          "name": "resolution",
+          "type": "enum",
+          "values": [
+            "1K",
+            "1.5K"
+          ],
+          "note": "Higher output is reached through the separate Enhancer upscale, not a generation parameter."
+        },
+        {
+          "name": "reference_images",
+          "type": "list",
+          "note": "Up to 3 references for style guidance; Krea 2 adds per-reference influence weights and multi-reference blending."
+        },
+        {
+          "name": "checkpoint",
+          "type": "enum",
+          "values": [
+            "Krea 2 Raw",
+            "Krea 2 Turbo"
+          ],
+          "note": "Turbo is the distilled speed variant; Raw is the base model."
+        }
       ],
       "notes": "Krea 2 (announced May 2026, ~12B parameters, built from scratch rather than as a FLUX fine-tune) is the current flagship, superseding Krea 1. The FLUX.1 Krea [dev] open-weights model, co-developed with Black Forest Labs, is a separate lineage sharing the same naturalistic aesthetic bias. Negative-prompt support, seed control, and guidance/step parameters are not documented anywhere Krea publishes, so those flags are set false to mean 'not exposed' rather than confirmed absent. Krea 2's resolution ceiling, full aspect-ratio list, and max prompt length are unverified; the values shown are Krea 1's confirmed figures. A realtime generation mode also exists but its parameters were not verified."
     },
@@ -127,10 +299,18 @@
       "limits": {
         "maxChars": null,
         "maxDurationSec": 20,
-        "durations": [5, 10, 15, 20],
+        "durations": [
+          5,
+          10,
+          15,
+          20
+        ],
         "aspectRatios": null,
         "fps": null,
-        "resolutions": ["480p", "720p"]
+        "resolutions": [
+          "480p",
+          "720p"
+        ]
       },
       "features": {
         "negativePrompt": false,
@@ -140,32 +320,99 @@
         "seeds": false
       },
       "params": [
-        { "name": "mode", "type": "enum", "values": ["text-to-video", "image-to-video", "video-to-video", "keyframe-to-video", "audio-continuation"], "note": "Generation modes named in BFL's launch post; the actual API field name is not published." },
-        { "name": "duration", "type": "enum", "values": [5, 10, 15, 20, "auto"], "note": "Steps reported by hosting providers, plus an auto setting that lets the model pick. 20s is the single-generation ceiling; go longer by chaining clips." },
-        { "name": "resolution", "type": "enum", "values": ["480p", "720p"], "note": "720p is the only figure BFL's launch post names, and it appears there only as the setting for preliminary evaluations. 480p comes from hosting providers. 1080p is reported as expected to follow but is not live." },
-        { "name": "reference_images", "type": "list", "note": "Up to 10 image references. Early-access reports say reference adherence is still inconsistent for image-to-video." },
-        { "name": "audio", "type": "boolean", "values": ["always on"], "note": "Native synchronized audio is produced with every clip; no silent mode is documented. Multilingual dialogue is supported — declare the language in the prompt." },
-        { "name": "seed", "type": "number", "note": "Not documented for FLUX 3 Video early access. Do not assume reproducibility." },
-        { "name": "variant", "type": "enum", "values": ["FLUX 3 Video", "FLUX 3 Image", "FLUX 3 Action / FLUX-mimic", "FLUX 3 Dev"], "note": "Only FLUX 3 Video is reachable, via gated early access. FLUX 3 Image early access had not opened as of July 31, 2026; FLUX 3 Dev open weights are planned for later in 2026." }
+        {
+          "name": "mode",
+          "type": "enum",
+          "values": [
+            "text-to-video",
+            "image-to-video",
+            "video-to-video",
+            "keyframe-to-video",
+            "audio-continuation"
+          ],
+          "note": "Generation modes named in BFL's launch post; the actual API field name is not published."
+        },
+        {
+          "name": "duration",
+          "type": "enum",
+          "values": [
+            5,
+            10,
+            15,
+            20,
+            "auto"
+          ],
+          "note": "Steps reported by hosting providers, plus an auto setting that lets the model pick. 20s is the single-generation ceiling; go longer by chaining clips."
+        },
+        {
+          "name": "resolution",
+          "type": "enum",
+          "values": [
+            "480p",
+            "720p"
+          ],
+          "note": "720p is the only figure BFL's launch post names, and it appears there only as the setting for preliminary evaluations. 480p comes from hosting providers. 1080p is reported as expected to follow but is not live."
+        },
+        {
+          "name": "reference_images",
+          "type": "list",
+          "note": "Up to 10 image references. Early-access reports say reference adherence is still inconsistent for image-to-video."
+        },
+        {
+          "name": "audio",
+          "type": "boolean",
+          "values": [
+            "always on"
+          ],
+          "note": "Native synchronized audio is produced with every clip; no silent mode is documented. Multilingual dialogue is supported — declare the language in the prompt."
+        },
+        {
+          "name": "seed",
+          "type": "number",
+          "note": "Not documented for FLUX 3 Video early access. Do not assume reproducibility."
+        },
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "FLUX 3 Video",
+            "FLUX 3 Image",
+            "FLUX 3 Action / FLUX-mimic",
+            "FLUX 3 Dev"
+          ],
+          "note": "Only FLUX 3 Video is reachable, via gated early access. FLUX 3 Image early access had not opened as of July 31, 2026; FLUX 3 Dev open weights are planned for later in 2026."
+        }
       ],
       "notes": "kind was changed from image to video on July 31, 2026. FLUX 3 launched July 23, 2026 as a multimodal image/video/audio/action model, but the only generation surface that actually exists is FLUX 3 Video (native audio, gated early access) — BFL's FLUX 3 Image early access had still not opened as of this update, so 'FLUX 3' as a target today means video with sound. For stills, target FLUX.2 rather than this profile; the previous revision of this entry described FLUX.2 limits and those have been removed to avoid implying they apply to FLUX 3. Re-checked August 4, 2026: BFL still publishes NO FLUX 3 documentation of any kind — the docs.bfl.ai index (docs.bfl.ml/llms.txt) lists no FLUX 3 page, no video endpoint and no video prompting guide, and BFL's own agent-skills repo (github.com/black-forest-labs/skills) covers FLUX.1 and FLUX.2 only. The only first-party FLUX 3 material is the launch post at bfl.ai/blog/flux-3, which names the modes, the 20s ceiling, native audio, multilingual dialogue, multi-shot via agentic chaining and 720p preliminary evaluations, but gives no prompting instructions. The guidance field therefore leans on BFL's model-family prompting guides — the component order and length tiers from docs.bfl.ai/guides/prompting_unified_building, and 'most FLUX models do not support negative prompts' plus the positive-replacement strategy from docs.bfl.ai/guides/prompting_unified_technical — which are written for FLUX.2 stills and are applied here as family conventions, not as documented FLUX 3 Video behaviour. UNVERIFIED, left null or false: max prompt length, fps, the aspect-ratio enum (the launch post says 'a broad range' and reporting spans 9:16 through 21:9, but no explicit list is published), seed support, and negative-prompt support. Booleans in features are set false where a capability is undocumented rather than confirmed absent — treat false as 'do not rely on it'. Duration, resolution and reference-count values here are cross-referenced from hosting providers and early-access reporting, and parameter names are indicative rather than exact."
     },
     {
       "id": "seedance-2",
-      "label": "Seedance 2.0",
+      "label": "Seedance 2.5 (Dreamina)",
       "vendor": "ByteDance",
       "kind": "video",
       "dialect": {
         "style": "structured-sections",
-        "guidance": "Order the prompt as ByteDance's published advanced formula — precise subject, action detail, scene and environment, light and colour, camera move, visual style, image quality, then constraint words — and write engineering-style instructions rather than mood copy, because the model reads a spatial layer (what is in frame) and a temporal layer (what changes over time) separately. Bind every reference before using it ('define the woman in the red dress and straw hat in Image 1 as Subject 1' — two or three stable static traits), then reuse that exact label everywhere or tag inline as Name@Image1, and put the reference you most need matched earliest in the prompt. For anything with more than one beat, write Shot 1 / Shot 2 / Shot 3 in event order and give each shot camera move or cut, then subject action and expression, then position change, then its audio; do not force exact per-shot second ranges, which the official guide calls unstable. Use the documented punctuation channels: (parentheses) for music, <angle brackets> for sound effects, {braces} for spoken lines — naming the language when it is neither Chinese nor English — and 【lenticular brackets】 for on-screen subtitles. Name exactly one camera move per shot in standard terms (medium shot, close-up, wide, slow push in, steady lateral track, locked-off); combining push, pull, pan and tilt in a single shot destabilises the picture. Describe action by body part with amplitude, speed and force, favour slow continuous small movements over sprinting or violent motion, and externalise emotion as physical detail ('shoulders trembling, fingers gripping a hem') instead of abstract words like 'very sad'. There is no negative-prompt field, so append constraint words instead — 'keep it subtitle-free', 'no logos', 'no watermark' — plus an explicit style lock such as '2D anime style' when realistic references might drag a stylised scene back to live action. Keep to four or five references (one or two character stills including a plain headshot, one scene still, one camera-move clip, one audio clip); filling every reference slot, using multi-view character sheets, or pasting a whole script all blur feature priority and cause identity drift or duplicate 'twin' characters."
+        "guidance": "Follow the official core formula in order: Subject + Action/Event, then Scene & Environment, Visual Style, Camera (shot size, angle, movement, cuts), and Audio — omit what is not needed; parameters never go in the prompt. Name and bind every distinct subject to its reference with @-role lines ('@Image 1 defines KAIA's face, hair, and amber jacket. Do not use the image background.') — one mapping per line, always with use-only/do-not-use exclusions, and add a [Subject Profile] block when one character spans scenes. For multi-event or long (up to 30s) shots, break the story into consecutive [Stage] blocks with exactly ONE primary change each and an explicit visible End state (positions, prop ownership, light) — time ranges (0-5 seconds: …) are budgets, not edit points; use an exact time only for one critical beat. Write audio inline with the official syntax: (music), <sound effects>, {dialogue}, 【subtitles】, and reinforce non-default dialogue language before the line ('Dialogue language: American English. She says…'). Translate emotions into 2-4 observable cues (eyes, brows, breathing, hands) rather than mood words alone, and translate uncommon camera terms into subject + visible change + direction (rack focus: leaves blur as her face sharpens). Standard terms (push in, orbit, dolly zoom, FPV, bullet time, whip-pan, handheld) work directly — but always say which subject the camera follows, where the move starts and ends. One camera move per shot stays the safest default; end every prompt by checking consistency: character count, wardrobe, prop ownership, spatial direction."
       },
       "limits": {
         "maxChars": null,
-        "maxDurationSec": 15,
+        "maxDurationSec": 30,
         "durations": null,
-        "aspectRatios": ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"],
+        "aspectRatios": [
+          "21:9",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16"
+        ],
         "fps": null,
-        "resolutions": ["480p", "720p", "1080p", "4k"]
+        "resolutions": [
+          "480p",
+          "720p",
+          "1080p",
+          "4k"
+        ]
       },
       "features": {
         "negativePrompt": false,
@@ -175,17 +422,86 @@
         "seeds": false
       },
       "params": [
-        { "name": "model", "type": "enum", "values": ["doubao-seedance-2-0-260128", "doubao-seedance-2-0-fast-260128", "doubao-seedance-2-0-mini-260615"], "note": "Ark model IDs for Seedance 2.0, 2.0 Fast and 2.0 Mini. Feature sets are near-identical; Fast and Mini trade quality for cost and cap out at 720p." },
-        { "name": "duration", "type": "number", "values": ["4-15"], "note": "Whole seconds, 4 to 15, on all three variants. Sent as \"duration\": 5." },
-        { "name": "ratio", "type": "enum", "values": ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], "note": "Sent as \"ratio\": \"16:9\". No adaptive/auto value is listed in the model table." },
-        { "name": "resolution", "type": "enum", "values": ["480p", "720p", "1080p", "4k"], "note": "Seedance 2.0 supports all four (4k is 10-bit and is rate-limited far harder). Seedance 2.0 Fast and Mini are 480p/720p only." },
-        { "name": "generate_audio", "type": "boolean", "values": ["true", "false"], "note": "Turns on joint audio+video generation. Seedance 2.0 natively generates sound with picture; audio is not merely a reference input." },
-        { "name": "return_last_frame", "type": "boolean", "values": ["true", "false"], "note": "Returns the final frame of the clip as an image, for chaining a following generation." },
-        { "name": "service_tier", "type": "enum", "values": ["flex"], "note": "Selects cheaper offline/batch inference." },
-        { "name": "content", "type": "list", "note": "Multimodal array of typed items — text, image_url, video_url, audio_url — each optionally carrying a role: reference_image, reference_video, first_frame, last_frame." },
-        { "name": "reference_inputs", "type": "list", "note": "Per request: 0-9 images, 0-3 videos, 0-3 audio clips, plus the required text. 'Text + audio' and audio-only inputs are rejected. Video extension chains at most 3 clips totalling 15s. Best results come from 4-5 references, not a full set." }
+        {
+          "name": "model",
+          "type": "enum",
+          "values": [
+            "doubao-seedance-2-0-260128",
+            "doubao-seedance-2-0-fast-260128",
+            "doubao-seedance-2-0-mini-260615"
+          ],
+          "note": "Ark model IDs for Seedance 2.0, 2.0 Fast and 2.0 Mini. Feature sets are near-identical; Fast and Mini trade quality for cost and cap out at 720p."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "values": [
+            "4-15"
+          ],
+          "note": "Whole seconds, 4 to 15, on all three variants. Sent as \"duration\": 5."
+        },
+        {
+          "name": "ratio",
+          "type": "enum",
+          "values": [
+            "21:9",
+            "16:9",
+            "4:3",
+            "1:1",
+            "3:4",
+            "9:16"
+          ],
+          "note": "Sent as \"ratio\": \"16:9\". No adaptive/auto value is listed in the model table."
+        },
+        {
+          "name": "resolution",
+          "type": "enum",
+          "values": [
+            "480p",
+            "720p",
+            "1080p",
+            "4k"
+          ],
+          "note": "Seedance 2.0 supports all four (4k is 10-bit and is rate-limited far harder). Seedance 2.0 Fast and Mini are 480p/720p only."
+        },
+        {
+          "name": "generate_audio",
+          "type": "boolean",
+          "values": [
+            "true",
+            "false"
+          ],
+          "note": "Turns on joint audio+video generation. Seedance 2.0 natively generates sound with picture; audio is not merely a reference input."
+        },
+        {
+          "name": "return_last_frame",
+          "type": "boolean",
+          "values": [
+            "true",
+            "false"
+          ],
+          "note": "Returns the final frame of the clip as an image, for chaining a following generation."
+        },
+        {
+          "name": "service_tier",
+          "type": "enum",
+          "values": [
+            "flex"
+          ],
+          "note": "Selects cheaper offline/batch inference."
+        },
+        {
+          "name": "content",
+          "type": "list",
+          "note": "Multimodal array of typed items — text, image_url, video_url, audio_url — each optionally carrying a role: reference_image, reference_video, first_frame, last_frame."
+        },
+        {
+          "name": "reference_inputs",
+          "type": "list",
+          "note": "Per request: 0-9 images, 0-3 videos, 0-3 audio clips, plus the required text. 'Text + audio' and audio-only inputs are rejected. Video extension chains at most 3 clips totalling 15s. Best results come from 4-5 references, not a full set."
+        }
       ],
-      "notes": "Rewritten August 4, 2026 against ByteDance's own Volcano Engine Ark documentation, which is now reachable: the Doubao Seedance 2.0 prompt guide (docs.volcengine.com/docs/82379/2222480, last updated 2026-07-20) and the Seedance 2.0 quickstart/tutorial (docs.volcengine.com/docs/82379/2291680). Newly verified from those pages: three model IDs; duration 4-15s; ratio enum without an auto value; resolution up to 4k (10-bit) on Seedance 2.0 and 720p on Fast/Mini; mp4 output; generate_audio, return_last_frame and service_tier params; and reference limits of 9 images / 3 videos / 3 audio (the previously recorded 'up to 12 mixed references' was a secondary-source figure and has been corrected). Native joint audio+video generation is now confirmed for 2.0 via generate_audio, so the earlier note calling native audio a 2.5-only claim was wrong and has been removed. timecodeBeats stays true because ByteDance's own quickstart example prompt uses second ranges ('2-4s', '4-6s'), but the prompt guide explicitly warns that precise timing support is unstable and recommends unlabelled Shot 1 / Shot 2 / Shot 3 ordering instead — prefer shot labels and treat second markers as a last resort. Documented failure modes and fixes: identity drift (add a bare headshot reference, never a multi-view turnaround sheet), duplicate 'twin' characters (label each character with its source image and add a global no-duplicate constraint), unrequested subtitles (constraint words plus landscape framing), style drift (explicit style lock), extension seams (trim 6 frames off the tail and 1 off the head when splicing), and quality decay when re-extending a generated clip. STILL UNVERIFIED, left null or false: max prompt length, fps, and seed support — none appear in the official docs, and features booleans set false mean 'undocumented, do not rely on it'. Seedance 2.5 was announced but its API was still listed as 'coming soon' on the Ark tutorial page; this profile deliberately describes 2.0."
+      "notes": "Guidance distilled from the official Dreamina Seedance 2.5 Prompt Guide (ByteDance Feishu doc, updated 2026-07-31). References: up to 30 images (≤4K), 10 videos (≤30s combined), 10 audio clips (≤30s combined); recommended 1-8 distinct subjects. Also supports video editing (source video is the sole editing master; aspect/duration auto-locked), forward/backward extension (align the boundary frame first), first/last-frame + multi-keyframe control, storyboard grids (≤15 panels), coarse/fine blockout re-rendering (pairs with Blockout exports), one-click video, and seamless transitions. Max prompt length and fps still unpublished."
     },
     {
       "id": "minimax-h3",
@@ -199,10 +515,34 @@
       "limits": {
         "maxChars": 7000,
         "maxDurationSec": 15,
-        "durations": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-        "aspectRatios": ["adaptive", "21:9", "16:9", "4:3", "1:1", "3:4", "9:16"],
+        "durations": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "aspectRatios": [
+          "adaptive",
+          "21:9",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16"
+        ],
         "fps": null,
-        "resolutions": ["768P", "2K"]
+        "resolutions": [
+          "768P",
+          "2K"
+        ]
       },
       "features": {
         "negativePrompt": false,
@@ -212,17 +552,83 @@
         "seeds": false
       },
       "params": [
-        { "name": "model", "type": "enum", "values": ["MiniMax-H3"], "note": "The model name in MiniMax's own V2 video-generation API. Some third-party hosts expose the same model as 'hailuo-03'." },
-        { "name": "content", "type": "list", "note": "Required multimodal array. Each element has a type — text, image_url, video_url, audio_url — and an optional role: first_frame, last_frame, reference_image, reference_video, reference_audio, base_video. Exactly one non-empty text item is mandatory; frame roles and reference roles cannot be mixed in one request." },
-        { "name": "duration", "type": "number", "values": ["4-15"], "note": "Required, whole seconds only, 4 to 15. The 4s floor is stated in MiniMax's API reference." },
-        { "name": "resolution", "type": "enum", "values": ["768P", "2K"], "note": "Both are generally available; MiniMax's launch post says 2K is the default tier and 768P is the cheaper one." },
-        { "name": "ratio", "type": "enum", "values": ["adaptive", "21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], "note": "Defaults to adaptive. Text-to-video requires a concrete ratio and rejects adaptive; first/last-frame mode ignores the field and always follows the input image; reference mode accepts either. Input images and videos must have a width/height ratio in [0.4, 2.5]." },
-        { "name": "reference_files", "type": "list", "note": "Omni-reference, 12 files maximum overall: up to 9 images, up to 3 video clips and up to 3 audio clips, with video and audio each 2-15s per clip and 15s combined. Audio cannot be sent alone — at least one reference image or video is required. Per-file caps: video 50 MB, image 30 MB, audio 15 MB, request body 64 MB." },
-        { "name": "audio", "type": "boolean", "values": ["always on"], "note": "Native stereo generated jointly with picture — dialogue, effects and music come out of the same pass. No silent mode is documented and there is no audio toggle in the API." },
-        { "name": "h3_context_ir", "type": "string", "note": "Separate async endpoint that reads the same multimodal content and returns an expanded structured prompt in content.prompt without generating video. Useful as a prompt-compilation step." },
-        { "name": "regeneration", "type": "string", "note": "Upscales an existing 768P H3 result to 2K by resubmitting the original content plus one video_url item with role=base_video. Implemented as in-context regeneration by the base model rather than a separate super-resolution pass." },
-        { "name": "callback_url", "type": "string", "note": "Optional task-status webhook; MiniMax first sends a challenge that must be echoed back within 3 seconds." },
-        { "name": "seed", "type": "number", "note": "Not present in the V2 video-generation API reference." }
+        {
+          "name": "model",
+          "type": "enum",
+          "values": [
+            "MiniMax-H3"
+          ],
+          "note": "The model name in MiniMax's own V2 video-generation API. Some third-party hosts expose the same model as 'hailuo-03'."
+        },
+        {
+          "name": "content",
+          "type": "list",
+          "note": "Required multimodal array. Each element has a type — text, image_url, video_url, audio_url — and an optional role: first_frame, last_frame, reference_image, reference_video, reference_audio, base_video. Exactly one non-empty text item is mandatory; frame roles and reference roles cannot be mixed in one request."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "values": [
+            "4-15"
+          ],
+          "note": "Required, whole seconds only, 4 to 15. The 4s floor is stated in MiniMax's API reference."
+        },
+        {
+          "name": "resolution",
+          "type": "enum",
+          "values": [
+            "768P",
+            "2K"
+          ],
+          "note": "Both are generally available; MiniMax's launch post says 2K is the default tier and 768P is the cheaper one."
+        },
+        {
+          "name": "ratio",
+          "type": "enum",
+          "values": [
+            "adaptive",
+            "21:9",
+            "16:9",
+            "4:3",
+            "1:1",
+            "3:4",
+            "9:16"
+          ],
+          "note": "Defaults to adaptive. Text-to-video requires a concrete ratio and rejects adaptive; first/last-frame mode ignores the field and always follows the input image; reference mode accepts either. Input images and videos must have a width/height ratio in [0.4, 2.5]."
+        },
+        {
+          "name": "reference_files",
+          "type": "list",
+          "note": "Omni-reference, 12 files maximum overall: up to 9 images, up to 3 video clips and up to 3 audio clips, with video and audio each 2-15s per clip and 15s combined. Audio cannot be sent alone — at least one reference image or video is required. Per-file caps: video 50 MB, image 30 MB, audio 15 MB, request body 64 MB."
+        },
+        {
+          "name": "audio",
+          "type": "boolean",
+          "values": [
+            "always on"
+          ],
+          "note": "Native stereo generated jointly with picture — dialogue, effects and music come out of the same pass. No silent mode is documented and there is no audio toggle in the API."
+        },
+        {
+          "name": "h3_context_ir",
+          "type": "string",
+          "note": "Separate async endpoint that reads the same multimodal content and returns an expanded structured prompt in content.prompt without generating video. Useful as a prompt-compilation step."
+        },
+        {
+          "name": "regeneration",
+          "type": "string",
+          "note": "Upscales an existing 768P H3 result to 2K by resubmitting the original content plus one video_url item with role=base_video. Implemented as in-context regeneration by the base model rather than a separate super-resolution pass."
+        },
+        {
+          "name": "callback_url",
+          "type": "string",
+          "note": "Optional task-status webhook; MiniMax first sends a challenge that must be echoed back within 3 seconds."
+        },
+        {
+          "name": "seed",
+          "type": "number",
+          "note": "Not present in the V2 video-generation API reference."
+        }
       ],
       "notes": "Re-verified August 4, 2026 against MiniMax's own documentation: the Video Generation guide (platform.minimax.io/docs/guides/video-generation), the Create Video Generation Task API reference (platform.minimax.io/docs/api-reference/video-generation-v2-create) and the MiniMax H3 launch post (minimax.io/blog/minimax-h3). Corrections made from those sources: the duration floor is 4s, not 5s; 768P is a generally available resolution tier alongside 2K, not a closed beta; the ratio enum value is 'adaptive' rather than 'auto'; and prompt_optimizer, which was a Hailuo 2.3 parameter, does not appear in the H3 V2 API and has been removed. fps was dropped from 24 to null — MiniMax documents an accepted frame-rate range of [23.976, 60] for input videos but publishes no output frame rate. timecodeBeats was flipped from true to false: MiniMax documents no timecode or shot-marker syntax, and the only prompt-side control it publishes is bracketed camera cues such as [pan], [zoom] and [static] placed after the description they modify. Multi-shot within one generation is real — MiniMax's research post discusses audio-visual relationships 'across multiple shots' — but there is no documented notation for it, so describe order in prose. Open weights for MiniMax-H3 are published at huggingface.co/MiniMaxAI/MiniMax-H3 (the launch post promised them 'in the coming days'; the exact release date was not verified from a MiniMax page). STILL UNVERIFIED, left null or false: output fps, seed support and negative-prompt support — false in features means 'undocumented, do not rely on it'."
     },
@@ -239,9 +645,16 @@
         "maxChars": null,
         "maxDurationSec": 10,
         "durations": null,
-        "aspectRatios": ["16:9", "9:16"],
+        "aspectRatios": [
+          "16:9",
+          "9:16"
+        ],
         "fps": null,
-        "resolutions": ["720p", "1080p", "4K"]
+        "resolutions": [
+          "720p",
+          "1080p",
+          "4K"
+        ]
       },
       "features": {
         "negativePrompt": false,
@@ -251,12 +664,45 @@
         "seeds": true
       },
       "params": [
-        { "name": "variant", "type": "enum", "values": ["ltx-2.3-22b-dev", "ltx-2.3-22b-distilled", "ltx-2.3-22b-fast", "ltx-2.3-22b-pro"], "note": "The distilled build runs in as few as 8 denoising steps." },
-        { "name": "enhance_prompt", "type": "boolean", "note": "Automatic prompt enrichment before generation." },
-        { "name": "seed", "type": "number", "note": "Exposed in the official inference scripts." },
-        { "name": "guidance_scale", "type": "number", "values": ["3-3.5 recommended"], "note": "From the repository's own documentation." },
-        { "name": "num_frames", "type": "number", "note": "Must equal a multiple of 8 plus 1 (9, 17, 25 ... 257). Width and height must each be divisible by 32." },
-        { "name": "generate_audio", "type": "boolean", "note": "Parameter name comes from third-party API wrappers; the official spelling is unverified." }
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "ltx-2.3-22b-dev",
+            "ltx-2.3-22b-distilled",
+            "ltx-2.3-22b-fast",
+            "ltx-2.3-22b-pro"
+          ],
+          "note": "The distilled build runs in as few as 8 denoising steps."
+        },
+        {
+          "name": "enhance_prompt",
+          "type": "boolean",
+          "note": "Automatic prompt enrichment before generation."
+        },
+        {
+          "name": "seed",
+          "type": "number",
+          "note": "Exposed in the official inference scripts."
+        },
+        {
+          "name": "guidance_scale",
+          "type": "number",
+          "values": [
+            "3-3.5 recommended"
+          ],
+          "note": "From the repository's own documentation."
+        },
+        {
+          "name": "num_frames",
+          "type": "number",
+          "note": "Must equal a multiple of 8 plus 1 (9, 17, 25 ... 257). Width and height must each be divisible by 32."
+        },
+        {
+          "name": "generate_audio",
+          "type": "boolean",
+          "note": "Parameter name comes from third-party API wrappers; the official spelling is unverified."
+        }
       ],
       "notes": "LTX-2 shipped January 6, 2026 as the first production-ready open-weights model combining 4K output, synchronized audio and open training code; LTX-2.3 is the current 22B-parameter checkpoint update, whose exact release date is unverified. Duration figures conflict across sources: audio-synced generation is documented around 10 seconds while third-party guides claim 6-20s or longer for the older non-audio pipeline, so maxDurationSec uses the conservative verified figure and durations is null. The frequently cited 50fps ceiling could not be confirmed against Lightricks' own material, so fps is null. Negative-prompt support is not mentioned in any official material and is set false meaning 'not documented'. Aspect ratios are inferred from the documented 1920x1080 and 1080x1920 outputs rather than from a published list."
     },
@@ -272,10 +718,21 @@
       "limits": {
         "maxChars": null,
         "maxDurationSec": 15,
-        "durations": [5, 10],
-        "aspectRatios": ["16:9", "9:16", "1:1"],
+        "durations": [
+          5,
+          10
+        ],
+        "aspectRatios": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
         "fps": null,
-        "resolutions": ["720p (std)", "1080p (pro)", "4K"]
+        "resolutions": [
+          "720p (std)",
+          "1080p (pro)",
+          "4K"
+        ]
       },
       "features": {
         "negativePrompt": true,
@@ -285,12 +742,52 @@
         "seeds": false
       },
       "params": [
-        { "name": "mode", "type": "enum", "values": ["std", "pro", "4k"], "note": "std is 720p, pro is 1080p, 4k is native rather than upscaled." },
-        { "name": "duration", "type": "enum", "values": [5, 10], "note": "Kling 3.0 advertises a 3-15s range while API documentation shows discrete 5/10 values; the two claims conflict." },
-        { "name": "negative_prompt", "type": "string", "note": "Standard use is artifact terms: blur, distortion, shaky camera, low quality." },
-        { "name": "cfg_scale", "type": "number", "values": ["0-1, default 0.5"], "note": "Higher values increase prompt adherence at the cost of motion flexibility. Was unsupported on 2.x models; its status on 3.0 is unverified." },
-        { "name": "camera_control", "type": "object", "note": "Structured camera parameter reported by API integrators; not confirmed against Kling's own reference." },
-        { "name": "aspect_ratio", "type": "enum", "values": ["16:9", "9:16", "1:1"] }
+        {
+          "name": "mode",
+          "type": "enum",
+          "values": [
+            "std",
+            "pro",
+            "4k"
+          ],
+          "note": "std is 720p, pro is 1080p, 4k is native rather than upscaled."
+        },
+        {
+          "name": "duration",
+          "type": "enum",
+          "values": [
+            5,
+            10
+          ],
+          "note": "Kling 3.0 advertises a 3-15s range while API documentation shows discrete 5/10 values; the two claims conflict."
+        },
+        {
+          "name": "negative_prompt",
+          "type": "string",
+          "note": "Standard use is artifact terms: blur, distortion, shaky camera, low quality."
+        },
+        {
+          "name": "cfg_scale",
+          "type": "number",
+          "values": [
+            "0-1, default 0.5"
+          ],
+          "note": "Higher values increase prompt adherence at the cost of motion flexibility. Was unsupported on 2.x models; its status on 3.0 is unverified."
+        },
+        {
+          "name": "camera_control",
+          "type": "object",
+          "note": "Structured camera parameter reported by API integrators; not confirmed against Kling's own reference."
+        },
+        {
+          "name": "aspect_ratio",
+          "type": "enum",
+          "values": [
+            "16:9",
+            "9:16",
+            "1:1"
+          ]
+        }
       ],
       "notes": "Kling 3.0 launched February 4, 2026 (confirmed via Kuaishou investor relations), with a faster Kling 3.0 Turbo variant following June 17, 2026. It generates synchronized video and audio in one pass with multi-language lip sync. Kling's own API documentation was unreachable, so parameter names and ranges were corroborated across multiple API integrators rather than the primary source. The 4K-at-60fps claim is third-party only, so fps is null. Max prompt length, seed support, and whether timestamped beat direction works are all unverified; the multi-shot toggle handles angle changes but is not confirmed to be timestamp-driven."
     },
@@ -306,8 +803,17 @@
       "limits": {
         "maxChars": null,
         "maxDurationSec": 20,
-        "durations": [4, 8, 12, 16, 20],
-        "aspectRatios": ["16:9", "9:16"],
+        "durations": [
+          4,
+          8,
+          12,
+          16,
+          20
+        ],
+        "aspectRatios": [
+          "16:9",
+          "9:16"
+        ],
         "fps": null,
         "resolutions": [
           "1280x720",
@@ -326,10 +832,44 @@
         "seeds": false
       },
       "params": [
-        { "name": "model", "type": "enum", "values": ["sora-2", "sora-2-pro"], "note": "Only sora-2-pro offers the 1024x1792, 1792x1024, 1080x1920 and 1920x1080 sizes." },
-        { "name": "seconds", "type": "enum", "values": [4, 8, 12, 16, 20], "note": "Default 4. Up to 6 extensions can chain a generation out to 120s total." },
-        { "name": "size", "type": "enum", "values": ["1280x720", "720x1280", "1792x1024", "1024x1792", "1920x1080", "1080x1920"] },
-        { "name": "input_reference", "type": "string", "note": "Acts as the first frame; must match the target output resolution exactly. JPEG, PNG or WebP." }
+        {
+          "name": "model",
+          "type": "enum",
+          "values": [
+            "sora-2",
+            "sora-2-pro"
+          ],
+          "note": "Only sora-2-pro offers the 1024x1792, 1792x1024, 1080x1920 and 1920x1080 sizes."
+        },
+        {
+          "name": "seconds",
+          "type": "enum",
+          "values": [
+            4,
+            8,
+            12,
+            16,
+            20
+          ],
+          "note": "Default 4. Up to 6 extensions can chain a generation out to 120s total."
+        },
+        {
+          "name": "size",
+          "type": "enum",
+          "values": [
+            "1280x720",
+            "720x1280",
+            "1792x1024",
+            "1024x1792",
+            "1920x1080",
+            "1080x1920"
+          ]
+        },
+        {
+          "name": "input_reference",
+          "type": "string",
+          "note": "Acts as the first frame; must match the target output resolution exactly. JPEG, PNG or WebP."
+        }
       ],
       "notes": "SUNSET WARNING: OpenAI discontinued the Sora web and mobile apps on April 26, 2026, and notified developers that the Videos API and every sora-2 model snapshot will be removed from the API on September 24, 2026, with no replacement named. Any workflow targeting Sora should be treated as short-lived. Sora 2 itself shipped in late September 2025 and remains the current and final version — there is no Sora 3. Max prompt length and output fps are not published, so both are null. Up to 2 uploaded character references (2-4s reference clips) are supported per generation. There is no seed parameter and no structured camera-control parameter; camera direction is prompt text only."
     },
@@ -345,10 +885,23 @@
       "limits": {
         "maxChars": null,
         "maxDurationSec": 8,
-        "durations": [4, 6, 8],
-        "aspectRatios": ["16:9", "9:16"],
-        "fps": [24],
-        "resolutions": ["720p", "1080p", "4k"]
+        "durations": [
+          4,
+          6,
+          8
+        ],
+        "aspectRatios": [
+          "16:9",
+          "9:16"
+        ],
+        "fps": [
+          24
+        ],
+        "resolutions": [
+          "720p",
+          "1080p",
+          "4k"
+        ]
       },
       "features": {
         "negativePrompt": true,
@@ -358,15 +911,68 @@
         "seeds": true
       },
       "params": [
-        { "name": "durationSeconds", "type": "enum", "values": [4, 6, 8], "note": "Must be 8 when using 1080p, 4k, extension, or reference images." },
-        { "name": "aspectRatio", "type": "enum", "values": ["16:9", "9:16"], "note": "16:9 is the default." },
-        { "name": "resolution", "type": "enum", "values": ["720p", "1080p", "4k"], "note": "720p is the default; 1080p and 4k require an 8s duration, and 4k is preview." },
-        { "name": "negativePrompt", "type": "string", "note": "Artifact and style exclusions, e.g. blurry, low quality, distorted." },
-        { "name": "seed", "type": "number", "note": "Improves reproducibility but is explicitly documented as not guaranteeing determinism." },
-        { "name": "image", "type": "string", "note": "Start-frame conditioning." },
-        { "name": "lastFrame", "type": "string", "note": "End-frame conditioning for interpolation between two stills." },
-        { "name": "referenceImages", "type": "list", "note": "Up to 3 reference images; forces an 8s duration." },
-        { "name": "personGeneration", "type": "enum", "values": ["allow_all"], "note": "Only this value is documented for text-to-video and extension." }
+        {
+          "name": "durationSeconds",
+          "type": "enum",
+          "values": [
+            4,
+            6,
+            8
+          ],
+          "note": "Must be 8 when using 1080p, 4k, extension, or reference images."
+        },
+        {
+          "name": "aspectRatio",
+          "type": "enum",
+          "values": [
+            "16:9",
+            "9:16"
+          ],
+          "note": "16:9 is the default."
+        },
+        {
+          "name": "resolution",
+          "type": "enum",
+          "values": [
+            "720p",
+            "1080p",
+            "4k"
+          ],
+          "note": "720p is the default; 1080p and 4k require an 8s duration, and 4k is preview."
+        },
+        {
+          "name": "negativePrompt",
+          "type": "string",
+          "note": "Artifact and style exclusions, e.g. blurry, low quality, distorted."
+        },
+        {
+          "name": "seed",
+          "type": "number",
+          "note": "Improves reproducibility but is explicitly documented as not guaranteeing determinism."
+        },
+        {
+          "name": "image",
+          "type": "string",
+          "note": "Start-frame conditioning."
+        },
+        {
+          "name": "lastFrame",
+          "type": "string",
+          "note": "End-frame conditioning for interpolation between two stills."
+        },
+        {
+          "name": "referenceImages",
+          "type": "list",
+          "note": "Up to 3 reference images; forces an 8s duration."
+        },
+        {
+          "name": "personGeneration",
+          "type": "enum",
+          "values": [
+            "allow_all"
+          ],
+          "note": "Only this value is documented for text-to-video and extension."
+        }
       ],
       "notes": "Veo 3.1 is current, with fast and lite preview variants (veo-3.1-generate-preview, veo-3.1-fast-generate-preview). There is no Veo 4 — at Google I/O 2026 Google launched Gemini Omni as a separate parallel multimodal track rather than a Veo successor. The prompt limit is 1,024 tokens, confirmed on two official pages; the equivalent character count is not published, so maxChars is null. Native audio is always on for 3.1 with no documented disable flag. The negativePrompt capability is confirmed in Google's own prompting guide, though the exact camelCase parameter spelling is corroborated more strongly through API reference mirrors than a single canonical page."
     },
@@ -385,7 +991,10 @@
         "durations": null,
         "aspectRatios": null,
         "fps": null,
-        "resolutions": ["512x512 (SD1.5 native)", "1024x1024 (SDXL and Flux native)"]
+        "resolutions": [
+          "512x512 (SD1.5 native)",
+          "1024x1024 (SDXL and Flux native)"
+        ]
       },
       "features": {
         "negativePrompt": true,
@@ -395,14 +1004,60 @@
         "seeds": true
       },
       "params": [
-        { "name": "seed", "type": "number", "note": "KSampler input; fixed seeds make A/B prompt comparisons meaningful." },
-        { "name": "steps", "type": "number", "note": "Commonly 20-30 for SDXL and lower for distilled or Flux graphs. Community consensus, not an official spec." },
-        { "name": "cfg", "type": "number", "note": "Typically 4-8 for SD1.5 and SDXL. Pinned near 1.0 for Flux, which is why negative prompts are inert there; Flux uses a FluxGuidance node instead." },
-        { "name": "sampler_name", "type": "enum", "values": ["euler", "dpmpp_2m", "dpmpp_sde", "uni_pc"], "note": "Non-exhaustive; the available list depends on the installed build." },
-        { "name": "scheduler", "type": "enum", "values": ["normal", "karras", "exponential", "sgm_uniform"] },
-        { "name": "denoise", "type": "number", "values": ["1.0 for text-to-image"], "note": "Lower values set image-to-image strength." },
-        { "name": "width / height", "type": "number", "note": "Set on the Empty Latent Image node; match the checkpoint's native training resolution or a standard bucket to avoid duplication artifacts." },
-        { "name": "BREAK", "type": "keyword", "note": "Not native to ComfyUI. Requires a custom node such as CLIPTextEncodeBREAK; segments a prompt into independently encoded chunks to stop concepts bleeding across the 75-token boundary." }
+        {
+          "name": "seed",
+          "type": "number",
+          "note": "KSampler input; fixed seeds make A/B prompt comparisons meaningful."
+        },
+        {
+          "name": "steps",
+          "type": "number",
+          "note": "Commonly 20-30 for SDXL and lower for distilled or Flux graphs. Community consensus, not an official spec."
+        },
+        {
+          "name": "cfg",
+          "type": "number",
+          "note": "Typically 4-8 for SD1.5 and SDXL. Pinned near 1.0 for Flux, which is why negative prompts are inert there; Flux uses a FluxGuidance node instead."
+        },
+        {
+          "name": "sampler_name",
+          "type": "enum",
+          "values": [
+            "euler",
+            "dpmpp_2m",
+            "dpmpp_sde",
+            "uni_pc"
+          ],
+          "note": "Non-exhaustive; the available list depends on the installed build."
+        },
+        {
+          "name": "scheduler",
+          "type": "enum",
+          "values": [
+            "normal",
+            "karras",
+            "exponential",
+            "sgm_uniform"
+          ]
+        },
+        {
+          "name": "denoise",
+          "type": "number",
+          "values": [
+            "1.0 for text-to-image"
+          ],
+          "note": "Lower values set image-to-image strength."
+        },
+        {
+          "name": "width / height",
+          "type": "number",
+          "note": "Set on the Empty Latent Image node; match the checkpoint's native training resolution or a standard bucket to avoid duplication artifacts."
+        },
+        {
+          "name": "BREAK",
+          "type": "keyword",
+          "note": "Not native to ComfyUI. Requires a custom node such as CLIPTextEncodeBREAK; segments a prompt into independently encoded chunks to stop concepts bleeding across the 75-token boundary."
+        }
       ],
       "notes": "These are stable graph conventions rather than a versioned product, so nothing here is tied to a release date. Weighting is implemented as interpolation toward a neutral embedding rather than a naive multiply, which is why very high weights degrade rather than intensify. BREAK is an imported convention from other UIs and needs a custom node installed. Recommended numeric ranges for steps, cfg and samplers are community consensus — ComfyUI core publishes no prescriptive settings document — so treat them as starting defaults, not verified specifications. The negativePrompt flag is true because the graph always exposes the input, even though it is functionally inert on Flux-family checkpoints."
     }

@@ -312,3 +312,15 @@ and hex codes for exact colour matching.
 - FLUX 3: essentially everything — prompt length, fps, aspect-ratio enum, seed
   support, reference count, real parameter names, and any prompting guidance at
   all. Recheck when BFL opens FLUX 3 documentation.
+
+## Addendum (2026-08-04): Official Dreamina Seedance 2.5 Prompt Guide
+
+Source: ByteDance Feishu doc (updated Jul 31) — https://bytedance.larkoffice.com/docx/A88jd0B47oAd8zxWp5ycZFMfnxh (via t.co link from Sam).
+
+Incorporated into the `seedance-2` profile (relabeled "Seedance 2.5 (Dreamina)"):
+- Core formula ordering + omit-what-you-don't-need; parameters never in the prompt.
+- @-role reference mapping with use-only/do-not-use exclusions; name-and-bind every subject; [Subject Profile] blocks; select references per scene.
+- Long-video [Stage] blocks: ONE primary change per stage + explicit visible End state; time ranges are budgets, not edit points. Up to 30s, up to 50 reference materials (30 img / 10 vid ≤30s / 10 audio ≤30s).
+- Audio syntax: (music), <SFX>, {dialogue}, 【subtitles】; dialogue-language reinforcement formula.
+- Emotional direction via 2–4 observable cues; uncommon camera terms translated to subject + visible change; supported technique list (dolly zoom, FPV, bullet time, whip-pan, bounce speed ramp…).
+- Editing (sole-editing-master pattern), extension (boundary-frame alignment), first/last-frame + keyframes, storyboard grids, coarse/fine blockout re-rendering, one-click video, seamless transitions, and the pre-submission checklist.
