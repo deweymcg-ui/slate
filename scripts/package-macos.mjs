@@ -13,6 +13,7 @@ const run = (cmd, args) => execFileSync(cmd, args, { stdio: ['ignore', 'ignore',
 
 const electronApp = resolve(root, 'node_modules/electron/dist/Electron.app')
 const dist = resolve(root, 'dist')
+const pkgVersion = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')).version
 const appPath = resolve(dist, 'Slate.app')
 
 if (!existsSync(resolve(root, 'out/main/index.js'))) {
@@ -50,7 +51,7 @@ cpSync(resolve(root, 'build/icon.png'), resolve(payload, 'build/icon.png'), { re
 cpSync(resolve(root, 'mcp'), resolve(payload, 'mcp'), { recursive: true })
 writeFileSync(
   resolve(payload, 'package.json'),
-  JSON.stringify({ name: 'slate', productName: 'Slate', version: '0.1.0', main: 'out/main/index.js' }, null, 2)
+  JSON.stringify({ name: 'slate', productName: 'Slate', version: pkgVersion, main: 'out/main/index.js' }, null, 2)
 )
 
 console.log('→ rebranding bundle')
@@ -63,7 +64,7 @@ pb(['-c', 'Set :CFBundleDisplayName Slate'])
 pb(['-c', 'Set :CFBundleIdentifier com.wassermanproductions.slate'])
 pb(['-c', 'Set :CFBundleIconFile slate.icns'])
 pb(['-c', 'Set :CFBundleExecutable Slate'])
-pb(['-c', 'Set :CFBundleShortVersionString 0.1.0'])
+pb(['-c', `Set :CFBundleShortVersionString ${pkgVersion}`])
 renameSync(resolve(appPath, 'Contents/MacOS/Electron'), resolve(appPath, 'Contents/MacOS/Slate'))
 
 console.log('→ ad-hoc signing')

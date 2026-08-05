@@ -1,7 +1,7 @@
 {
   "name": "slate",
-  "version": "0.1.0",
-  "description": "Slate — the prompt studio for AI filmmaking. Plan shots, direct coverage, keep continuity, and compile production-ready prompts for any image or video generator.",
+  "version": "0.2.0",
+  "description": "Slate \u2014 the prompt studio for AI filmmaking. Plan shots, direct coverage, keep continuity, and compile production-ready prompts for any image or video generator.",
   "main": "out/main/index.js",
   "author": "Sam Wasserman",
   "license": "Apache-2.0",
