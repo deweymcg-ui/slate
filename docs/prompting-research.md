@@ -324,3 +324,24 @@ Incorporated into the `seedance-2` profile (relabeled "Seedance 2.5 (Dreamina)")
 - Audio syntax: (music), <SFX>, {dialogue}, 【subtitles】; dialogue-language reinforcement formula.
 - Emotional direction via 2–4 observable cues; uncommon camera terms translated to subject + visible change; supported technique list (dolly zoom, FPV, bullet time, whip-pan, bounce speed ramp…).
 - Editing (sole-editing-master pattern), extension (boundary-frame alignment), first/last-frame + keyframes, storyboard grids, coarse/fine blockout re-rendering, one-click video, seamless transitions, and the pre-submission checklist.
+
+
+## Addendum — MiniMax H3 official prompt guides (August 4, 2026)
+
+MiniMax published two official prompt-writing guides alongside the open weights
+at huggingface.co/MiniMaxAI/MiniMax-H3:
+
+- `docs/VIDEO_PROMPT_WRITING_GUIDE_base_en.md` — the three-field prompt format
+  (integrated_multimodal_description / overall_soundscape / non_diegetic_music),
+  `[Shot N]` markers with `MM:SS.SSS` timestamps, the camera-move vocabulary with
+  amplitude/speed modifiers, `(Sx)` speaker ids with `<d>[Language] ...</d>`
+  dialogue, `<scenetrans>` / `<cutoff>` tags, quoted on-screen text, and the
+  task-instruction first lines for image-, first/last-frame- and last-frame-to-video.
+- `docs/VIDEO_PROMPT_WRITING_GUIDE_ref_en.md` — the reference-label grammar:
+  `<Subject N>` / `<Picture N>` / `<Video N>` / `<Audio N>`, the bracketed
+  task-type summary, and retention_analysis markers.
+
+Both are folded into the `minimax-h3` profile. They supersede the earlier finding
+that MiniMax documents no shot-marker syntax (that was true of the platform API
+docs; the open-weights guides define one), so `timecodeBeats` is back to true and
+Slate beat sheets compile to H3 shot markers.
