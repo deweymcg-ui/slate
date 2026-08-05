@@ -14,8 +14,26 @@ import type {
   BeatDirection
 } from '../../../shared/types'
 import { uid } from '../stores/project'
+import profilesData from '../../../../data/model-profiles.json'
+import type { ModelProfile } from './compile'
+
+const MODEL_PROFILES = (profilesData as { profiles: ModelProfile[] }).profiles
 
 // ---------- Context assembly ----------
+
+function targetProfile(p: Project, shot: Shot | null): ModelProfile | null {
+  const id = shot?.targetModel ?? p.defaults.targetModel
+  return MODEL_PROFILES.find((m) => m.id === id) ?? null
+}
+
+/** One line telling the brain which generator this prompt is destined for, so
+ *  writing (not just the final compile) already leans toward its dialect. */
+export function modelHint(p: Project, shot: Shot | null): string {
+  const prof = targetProfile(p, shot)
+  if (!prof) return ''
+  const budget = prof.limits.maxChars ? ` Budget: ${prof.limits.maxChars} chars.` : ''
+  return `\nTARGET GENERATOR: ${prof.label} (${prof.kind}).${budget} Keep phrasing compatible with its dialect: ${prof.dialect.guidance.slice(0, 260)}…`
+}
 
 function describeSpec(shot: Shot): string {
   const s = shot.spec
@@ -185,7 +203,7 @@ export async function transformPrompt(
   return runBrain(p, {
     task: `transform:${kind}`,
     tier: t.tier,
-    prompt: `${projectContext(p, scene)}\n\nSHOT SPEC: ${describeSpec(shot)}\n\nTASK: ${t.text}${lockNotice(shot)}\n\nCURRENT PROMPT:\n${shot.prompt}\n\nReturn ONLY the rewritten prompt in the sectioned format — no commentary.`
+    prompt: `${projectContext(p, scene)}\n\nSHOT SPEC: ${describeSpec(shot)}${modelHint(p, shot)}\n\nTASK: ${t.text}${lockNotice(shot)}\n\nCURRENT PROMPT:\n${shot.prompt}\n\nReturn ONLY the rewritten prompt in the sectioned format — no commentary.`
   })
 }
 

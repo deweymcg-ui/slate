@@ -13,6 +13,10 @@ import {
   type TransformKind
 } from '../lib/brainTasks'
 import type { Shot, Variant } from '../../../shared/types'
+import profilesData from '../../../../data/model-profiles.json'
+import type { ModelProfile } from '../lib/compile'
+
+const SPEC_MODELS = (profilesData as { profiles: ModelProfile[] }).profiles
 
 const TRANSFORMS: Array<{ kind: TransformKind; label: string; hint: string }> = [
   { kind: 'structure', label: 'Structure', hint: 'Organize into sections' },
@@ -369,6 +373,21 @@ function SpecBar({ shot }: { shot: Shot }): React.JSX.Element {
 
   return (
     <div className="spec-bar">
+      <span className="spec-item">
+        <label>Model</label>
+        <select
+          value={shot.targetModel ?? ''}
+          title="Target generator — prompts are written and compiled in its dialect"
+          onChange={(e) => set((s) => (s.targetModel = e.target.value || null))}
+        >
+          <option value="">default</option>
+          {SPEC_MODELS.map((m) => (
+            <option key={m.id} value={m.id}>
+              {m.label}
+            </option>
+          ))}
+        </select>
+      </span>
       <span className="spec-item">
         <label>Len</label>
         <input

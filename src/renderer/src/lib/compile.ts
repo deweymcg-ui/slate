@@ -8,7 +8,7 @@ export interface ModelProfile {
   id: string
   label: string
   vendor: string
-  kind: 'image' | 'video' | 'node-graph'
+  kind: 'image' | 'video' | 'node-graph' | 'node-graph'
   dialect: { style: string; guidance: string }
   limits: {
     maxChars: number | null
@@ -57,7 +57,7 @@ export function preflight(shot: Shot, profile: ModelProfile): CompileWarning[] {
     warns.push({ kind: 'aspect', message: `${profile.label} aspect ratios: ${profile.limits.aspectRatios.join(', ')} — shot is ${ar}.` })
   }
   const fps = shot.spec.fps
-  if (fps && profile.limits.fps && !profile.limits.fps.includes(fps)) {
+  if (fps && Array.isArray(profile.limits.fps) && profile.limits.fps.length > 0 && !profile.limits.fps.includes(fps)) {
     warns.push({ kind: 'fps', message: `${profile.label} renders at ${profile.limits.fps.join('/')}fps — shot spec says ${fps}fps.` })
   }
   if (shot.beatSheet?.length && !profile.features.timecodeBeats) {
