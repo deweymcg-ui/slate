@@ -343,4 +343,5 @@ export interface SlateApi {
   revealProject(id: string): Promise<void>
   onProjectsChanged(cb: () => void): () => void
   onHelpOpen(cb: () => void): () => void
+  onAboutOpen(cb: () => void): () => void
 }

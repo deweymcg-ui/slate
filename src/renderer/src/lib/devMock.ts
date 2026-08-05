@@ -52,6 +52,9 @@ export function installDevMock(): void {
       }
     },
     async brainCancel() {},
+    onAboutOpen() {
+      return () => {}
+    },
     async localModels() {
       return { endpoint: null, models: [] }
     },

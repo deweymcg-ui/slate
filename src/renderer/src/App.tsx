@@ -5,6 +5,7 @@ import ShotWorkspace from './components/ShotWorkspace'
 import RightRail from './components/RightRail'
 import FirstADPanel from './components/FirstADPanel'
 import HelpModal from './components/HelpModal'
+import AboutModal from './components/AboutModal'
 import Home from './components/Home'
 import './styles/app.css'
 
@@ -13,6 +14,7 @@ export default function App(): React.JSX.Element {
   const [railOpen, setRailOpen] = useState(true)
   const [adOpen, setAdOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
+  const [aboutOpen, setAboutOpen] = useState(false)
   const [testState, setTestState] = useState<'idle' | 'busy' | 'ok' | 'fail'>('idle')
   const [testMsg, setTestMsg] = useState<string | null>(null)
 
@@ -44,9 +46,11 @@ export default function App(): React.JSX.Element {
       void refreshMetas()
     })
     const offHelp = window.slate.onHelpOpen(() => setHelpOpen(true))
+    const offAbout = window.slate.onAboutOpen(() => setAboutOpen(true))
     return () => {
       off()
       offHelp()
+      offAbout()
     }
   }, [refreshMetas, refreshBrain])
 
@@ -95,6 +99,7 @@ export default function App(): React.JSX.Element {
       </div>
 
       {helpOpen && <HelpModal onClose={() => setHelpOpen(false)} />}
+      {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
       {testMsg && testState === 'fail' && (
         <div className="brain-toast" onClick={() => setTestMsg(null)}>
           ⚠ {testMsg}

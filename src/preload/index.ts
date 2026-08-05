@@ -29,6 +29,11 @@ const api: SlateApi & { brainRunWith: (req: BrainRequest, backend: BrainBackend)
     ipcRenderer.on('projects:changed', listener)
     return () => ipcRenderer.removeListener('projects:changed', listener)
   },
+  onAboutOpen: (cb: () => void) => {
+    const handler = (): void => cb()
+    ipcRenderer.on('about:open', handler)
+    return () => ipcRenderer.removeListener('about:open', handler)
+  },
   onHelpOpen: (cb: () => void) => {
     const listener = (): void => cb()
     ipcRenderer.on('help:open', listener)

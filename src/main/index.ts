@@ -71,7 +71,13 @@ function buildMenu(): void {
     {
       label: 'Slate',
       submenu: [
-        { role: 'about', label: 'About Slate' },
+        {
+          label: 'About Slate',
+          click: () => {
+            win?.webContents.send('about:open')
+            win?.show()
+          }
+        },
         { type: 'separator' },
         { label: 'Slate Help', accelerator: 'CmdOrCtrl+/', click: openHelp },
         { type: 'separator' },
