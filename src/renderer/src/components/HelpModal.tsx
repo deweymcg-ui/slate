@@ -49,6 +49,12 @@ const SECTIONS: Section[] = [
           in the Project Bible; pick &quot;Local model&quot; and Slate auto-detects your server and
           lists its models. For reference breakdowns, load a vision-capable local model.
         </p>
+        <p className="help-tip">
+          🎞 <b>Stills Library</b> (Refs tab): scan your dailies for circled takes — or add any
+          clip — extract stills, and pin them to a character, location, or look. ✦ Fill on a sheet
+          with stills describes the person or place you actually shot, and the sheet keeps the
+          images for continuity.
+        </p>
       </>
     )
   },

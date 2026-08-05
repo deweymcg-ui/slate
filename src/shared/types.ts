@@ -95,6 +95,8 @@ export interface CharacterSheet {
   lightingMood: string
   scenario: ScenarioTab
   notes: string
+  /** Continuity stills — image paths harvested from circled takes or clips. */
+  images?: string[]
 }
 
 export type ArtDeptKind = 'prop' | 'wardrobe' | 'vehicle'
@@ -122,6 +124,7 @@ export interface LocationSheet {
   textures: string
   practicalLights: string
   notes: string
+  images?: string[]
 }
 
 export interface StyleProfile {
@@ -136,6 +139,7 @@ export interface StyleProfile {
   blocking: string
   editorial: string
   notes: string
+  images?: string[]
 }
 
 export interface ElementSheet {
@@ -147,6 +151,16 @@ export interface ElementSheet {
   texture: string
   mood: string
   notes: string
+}
+
+export interface CircledTake {
+  project: string
+  shot: string | null
+  mediaPath: string
+  fileName: string
+  rating: number
+  inSec: number | null
+  outSec: number | null
 }
 
 export interface Reference {
@@ -321,6 +335,8 @@ export interface SlateApi {
   pickMedia(): Promise<string[]>
   pickAudio(): Promise<string[]>
   ingestMedia(projectId: string, path: string): Promise<{ kind: 'image' | 'video'; frames: string[] }>
+  stillsDiscover(): Promise<CircledTake[]>
+  stillsExtract(projectId: string, mediaPath: string, inSec?: number | null, outSec?: number | null): Promise<string[]>
   analyzeAudio(path: string): Promise<AudioFingerprint>
   pathForFile(file: File): string
   copyText(text: string): Promise<void>

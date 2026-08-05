@@ -10,6 +10,9 @@ const api: SlateApi & { brainRunWith: (req: BrainRequest, backend: BrainBackend)
   revealProject: (id: string) => ipcRenderer.invoke('projects:reveal', id),
   brainStatus: (localEndpoint?: string) => ipcRenderer.invoke('brain:status', localEndpoint),
   localModels: (endpoint?: string) => ipcRenderer.invoke('brain:localModels', endpoint),
+  stillsDiscover: () => ipcRenderer.invoke('stills:discover'),
+  stillsExtract: (projectId: string, mediaPath: string, inSec?: number | null, outSec?: number | null) =>
+    ipcRenderer.invoke('stills:extract', projectId, mediaPath, inSec, outSec),
   brainRun: (req: BrainRequest) => ipcRenderer.invoke('brain:run', req),
   brainRunWith: (req: BrainRequest, backend: BrainBackend) =>
     ipcRenderer.invoke('brain:run', { ...req, backend }),

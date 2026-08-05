@@ -354,12 +354,21 @@ export async function beatSheetForShot(p: Project, scene: Scene | null, shot: Sh
 
 // ---------- Studios ----------
 
-export async function fillCharacter(p: Project, description: string, scenario: string): Promise<BrainResult> {
+export async function fillCharacter(
+  p: Project,
+  description: string,
+  scenario: string,
+  stills?: string[]
+): Promise<BrainResult> {
+  const fromStills = stills?.length
+    ? '\n\nContinuity stills of this exact character are attached — describe the person you SEE (face, hair, wardrobe as shot), not an invention. The sheet must match the footage.'
+    : ''
   return runBrain(p, {
     task: 'casting-fill',
     tier: 'top',
     expectJson: true,
-    prompt: `${projectContext(p)}\n\nThe director described a character: "${description}" (sheet context: ${scenario}).\n\nInvent a complete, castable person — specific and photographable, no clichés. Return JSON with exactly these string fields: {"name","age","gender","ethnicity","faceFeatures","hair","clothing","expression","eyeDirection","mood","environment","keyLightSide","lightingMood"}. faceFeatures: skin, face shape, distinguishing marks, facial hair. Keep each field a compact comma-separated phrase list like a casting sheet, not sentences.`
+    images: stills?.slice(0, 6),
+    prompt: `${projectContext(p)}\n\nThe director described a character: "${description}" (sheet context: ${scenario}).${fromStills}\n\nProduce a complete, castable person — specific and photographable, no clichés. Return JSON with exactly these string fields: {"name","age","gender","ethnicity","faceFeatures","hair","clothing","expression","eyeDirection","mood","environment","keyLightSide","lightingMood"}. faceFeatures: skin, face shape, distinguishing marks, facial hair. Keep each field a compact comma-separated phrase list like a casting sheet, not sentences.`
   })
 }
 

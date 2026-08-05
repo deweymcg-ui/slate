@@ -55,6 +55,12 @@ export function installDevMock(): void {
     async localModels() {
       return { endpoint: null, models: [] }
     },
+    async stillsDiscover() {
+      return []
+    },
+    async stillsExtract() {
+      return []
+    },
     async brainTest(): Promise<import('../../../shared/types').BrainResult> {
       return {
         id: 'test',

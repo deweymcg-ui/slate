@@ -78,7 +78,7 @@ function Casting(): React.JSX.Element {
   const autoFill = async (): Promise<void> => {
     if (!describe.trim() || !editing) return
     setBusy(true)
-    const res = await fillCharacter(project, describe.trim(), editing.scenario)
+    const res = await fillCharacter(project, describe.trim(), editing.scenario, editing.images)
     setBusy(false)
     if (res.ok && res.json) {
       const f = res.json as Record<string, string>
@@ -125,9 +125,14 @@ function Casting(): React.JSX.Element {
             onKeyDown={(e) => e.key === 'Enter' && void autoFill()}
           />
           <button className="btn btn-key btn-sm" disabled={busy || !describe.trim()} onClick={() => void autoFill()}>
-            {busy ? '…' : '✦ Fill'}
+            {busy ? '…' : editing.images?.length ? '✦ Fill from stills' : '✦ Fill'}
           </button>
         </div>
+
+        <SheetStills
+          images={editing.images}
+          onRemove={(p) => set({ images: (editing.images ?? []).filter((x) => x !== p) })}
+        />
 
         <div className="grid-3">
           <div className="field" style={{ gridColumn: 'span 1' }}>
@@ -390,6 +395,10 @@ function Locations(): React.JSX.Element {
           <label>Name</label>
           <input value={editing.name} onChange={(e) => set({ name: e.target.value })} />
         </div>
+        <SheetStills
+          images={editing.images}
+          onRemove={(p) => set({ images: (editing.images ?? []).filter((x) => x !== p) })}
+        />
         <div className="field">
           <label>Int / Ext</label>
           <select value={editing.interiorExterior} onChange={(e) => set({ interiorExterior: e.target.value as LocationSheet['interiorExterior'] })}>
@@ -562,6 +571,15 @@ function Lookbook(): React.JSX.Element {
           <div style={{ fontSize: 12, color: 'var(--ink-2)', margin: '4px 0 8px' }}>
             {s.tone.slice(0, 60)} · {s.palette.slice(0, 50)}
           </div>
+          <SheetStills
+            images={s.images}
+            onRemove={(p) =>
+              store.mutate((proj) => {
+                const sheet = proj.lookbook.find((x) => x.id === s.id)
+                if (sheet) sheet.images = (sheet.images ?? []).filter((x) => x !== p)
+              })
+            }
+          />
           <details style={{ fontSize: 12, color: 'var(--ink-2)', marginBottom: 8 }}>
             <summary style={{ cursor: 'pointer', color: 'var(--ink-1)' }}>Full profile</summary>
             {(['tone', 'palette', 'lighting', 'lensLanguage', 'movement', 'blocking', 'editorial', 'notes'] as const).map((k) => (
@@ -572,6 +590,30 @@ function Lookbook(): React.JSX.Element {
           </details>
           <button className="btn btn-sm btn-ghost btn-danger" onClick={() => store.removeStyle(s.id)}>
             Remove
+          </button>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+
+/** Continuity stills pinned to a sheet from the Stills Library. */
+function SheetStills({
+  images,
+  onRemove
+}: {
+  images?: string[]
+  onRemove: (path: string) => void
+}): React.JSX.Element | null {
+  if (!images || images.length === 0) return null
+  return (
+    <div className="sheet-stills">
+      {images.map((p) => (
+        <div key={p} className="sheet-still">
+          <img src={`file://${p}`} alt="" title={p} />
+          <button className="btn btn-ghost btn-danger" onClick={() => onRemove(p)}>
+            ✕
           </button>
         </div>
       ))}

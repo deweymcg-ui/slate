@@ -34,6 +34,7 @@ You write (or direct) structured, sectioned shot prompts — **Subject · Compos
 - 📦 **Deliverables** — per-model compile with preflight warnings (duration caps, aspect ratios, fps), smart character-budget compression that keeps locked lines verbatim, negative prompts where supported, timecode beats where honored. Copy one prompt, or export a scene as a Markdown shot list / CSV.
 - 🗒️ **Takes Log & version history** — circle the take that worked; roll any prompt back.
 - 🔌 **MCP built in** — agents and other tools can read and write your projects while Slate runs.
+- 🎞 **A Stills Library** — scan your dailies for circled takes (Circle Take) or any clip, extract stills with ffmpeg, and pin them to a character, location, or look. ✦ Fill then describes the person or place you actually shot, so sheets stay true to the footage.
 - 🔑 **No API keys, ever** — the brain is your own [Claude Code](https://claude.com/claude-code) or Codex sign-in, or any **local model** via Ollama, LM Studio, vLLM, llama.cpp… fully offline.
 
 ## Screenshots

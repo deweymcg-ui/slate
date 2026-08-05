@@ -1,13 +1,15 @@
 import { app, BrowserWindow, ipcMain, dialog, shell, clipboard, Menu } from 'electron'
 import { join } from 'path'
 import { brainRun, brainCancel, brainStatus, detectLocal } from './brain'
+import { discoverCircledTakes, extractStills } from './stills'
 import {
   listProjects,
   createProject,
   openProject,
   saveProject,
   deleteProject,
-  projectsRoot
+  projectsRoot,
+  cacheDir
 } from './projects'
 import { startControlServer } from './control'
 import { extractFrames, mediaKind } from './ingest'
@@ -226,6 +228,11 @@ ipcMain.handle('brain:run', (_e, req: BrainRequest & { backend: BrainBackend }) 
   brainRun(req, req.backend)
 )
 ipcMain.handle('brain:cancel', (_e, id: string) => brainCancel(id))
+
+ipcMain.handle('stills:discover', () => discoverCircledTakes())
+ipcMain.handle('stills:extract', (_e, projectId: string, mediaPath: string, inSec?: number | null, outSec?: number | null) =>
+  extractStills(cacheDir(projectId), mediaPath, inSec, outSec)
+)
 
 ipcMain.handle('media:pick', async () => {
   const res = await dialog.showOpenDialog({
