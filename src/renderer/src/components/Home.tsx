@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { useProject } from '../stores/project'
 import brandArt from '../assets/brand.webp'
 
-const APP_VERSION = '0.1.0'
+import pkg from '../../../../package.json'
+
+const APP_VERSION = (pkg as { version: string }).version
 
 export default function Home(): React.JSX.Element {
   const { metas, create, open, remove, brain } = useProject()
@@ -118,13 +120,32 @@ export default function Home(): React.JSX.Element {
                 Slate makes the prompts, your generators make the picture and sound.
               </p>
               <p className="about-meta">
-                Version {APP_VERSION} · Apache-2.0 · Sam Wasserman
+                Version {APP_VERSION} · Apache-2.0 · Created by Sam Wasserman
                 <br />
-                Brain: your local Claude Code or Codex sign-in — no API keys.
+                Brain: your Claude Code or Codex sign-in, or a local model — no API keys.
+                <br />
+                <a href="https://wassermanproductions.com" target="_blank" rel="noreferrer">
+                  wassermanproductions.com
+                </a>{' '}
+                ·{' '}
+                <a href="https://wasserman.ai" target="_blank" rel="noreferrer">
+                  wasserman.ai
+                </a>
               </p>
-              <button className="btn" onClick={() => setShowAbout(false)}>
-                Close
-              </button>
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                <a
+                  className="btn btn-key"
+                  href="https://ko-fi.com/samwasserman"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ textDecoration: 'none' }}
+                >
+                  ♥ Support on Ko-fi
+                </a>
+                <button className="btn" onClick={() => setShowAbout(false)}>
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>

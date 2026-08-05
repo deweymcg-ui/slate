@@ -413,6 +413,21 @@ export default function HelpModal({ onClose }: { onClose(): void }): React.JSX.E
             {section.body}
           </article>
         </div>
+        <div className="help-foot">
+          <span>
+            Created by <b>Sam Wasserman</b> ·{' '}
+            <a href="https://wassermanproductions.com" target="_blank" rel="noreferrer">
+              wassermanproductions.com
+            </a>{' '}
+            ·{' '}
+            <a href="https://wasserman.ai" target="_blank" rel="noreferrer">
+              wasserman.ai
+            </a>
+          </span>
+          <a className="btn btn-sm btn-key" href="https://ko-fi.com/samwasserman" target="_blank" rel="noreferrer">
+            ♥ Support on Ko-fi
+          </a>
+        </div>
       </div>
     </div>
   )

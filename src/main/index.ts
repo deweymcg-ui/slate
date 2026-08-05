@@ -56,7 +56,7 @@ app.setName('Slate')
 
 app.setAboutPanelOptions({
   applicationName: 'Slate',
-  applicationVersion: '0.1.0',
+  applicationVersion: app.getVersion(),
   copyright: 'Apache-2.0 · Sam Wasserman',
   credits: 'The prompt studio for AI filmmaking.\nPlan · Direct · Compile',
   iconPath: join(__dirname, '../../build/icon.png')
@@ -75,6 +75,10 @@ function buildMenu(): void {
         { type: 'separator' },
         { label: 'Slate Help', accelerator: 'CmdOrCtrl+/', click: openHelp },
         { type: 'separator' },
+        { label: 'Support Slate on Ko-fi ♥', click: () => void shell.openExternal('https://ko-fi.com/samwasserman') },
+        { label: 'wassermanproductions.com', click: () => void shell.openExternal('https://wassermanproductions.com') },
+        { label: 'wasserman.ai', click: () => void shell.openExternal('https://wasserman.ai') },
+        { type: 'separator' },
         { role: 'hide', label: 'Hide Slate' },
         { role: 'hideOthers' },
         { role: 'unhide' },
@@ -88,7 +92,13 @@ function buildMenu(): void {
     { role: 'windowMenu' },
     {
       role: 'help',
-      submenu: [{ label: 'Slate Help', accelerator: 'CmdOrCtrl+?', click: openHelp }]
+      submenu: [
+        { label: 'Slate Help', accelerator: 'CmdOrCtrl+?', click: openHelp },
+        { type: 'separator' },
+        { label: 'Support Slate on Ko-fi ♥', click: () => void shell.openExternal('https://ko-fi.com/samwasserman') },
+        { label: 'wassermanproductions.com', click: () => void shell.openExternal('https://wassermanproductions.com') },
+        { label: 'wasserman.ai', click: () => void shell.openExternal('https://wasserman.ai') }
+      ]
     }
   ]
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))

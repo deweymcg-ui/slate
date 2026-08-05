@@ -85,10 +85,13 @@
 
 .about-brand {
   width: 100%;
+  max-height: 46vh;
+  object-fit: contain;
   border-radius: 16px;
   margin-bottom: 16px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
+.about-modal { max-height: 92vh; overflow-y: auto; }
 
 .about-text {
   font-size: 12.5px;
@@ -1008,3 +1011,20 @@
   padding: 0;
   border-radius: 50%;
 }
+
+/* ---- Help footer: credit + support ---- */
+.help-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 18px;
+  border-top: 1px solid var(--line, #262a33);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.help-foot a { color: var(--key); text-decoration: none; }
+.help-foot a:hover { text-decoration: underline; }
+.help-foot .btn-key { text-decoration: none; }
+.about-meta a { color: var(--key); text-decoration: none; }
+.about-meta a:hover { text-decoration: underline; }
