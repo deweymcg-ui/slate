@@ -116,7 +116,7 @@ Stack: Electron + TypeScript + React, CodeMirror 6 editor, zustand state, vitest
 
 A few people asked if they could send tips to support my work developing open source tools. So I set up an optional way in case anyone wants to.
 
-No pressure at all. Using the apps, sharing them, starring the repositories, and contributing code all help too. Thank you.
+No pressure at all. Using the apps, sharing them, starring the repositories, and contributing code all help too. Thank you.https://github.com/wassermanproductions/slate
 
 - [GitHub Sponsors](https://github.com/sponsors/wassermanproductions)
 - [Ko-fi](https://ko-fi.com/samwasserman)
